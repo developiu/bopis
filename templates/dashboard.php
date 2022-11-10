@@ -1,3 +1,3 @@
-<?php $this->layout('layout') ?>
+<?php $this->layout('layouts/layout') ?>
 
 DASHBOARD
