@@ -28,7 +28,7 @@ class FrontController
      */
     public function process($controller, $action)
     {
-        $controllerClassName = self::CONTROLLER_BASE_NS . '\\' . ucfirst($this->convertUnderscoresTocamelCase($controller));
+        $controllerClassName = self::CONTROLLER_BASE_NS . '\\' . ucfirst($this->convertTocamelCase($controller));
         if(!class_exists($controllerClassName)) {
             throw new MvcException("Controller inesistente: '$controllerClassName'");
         }
@@ -36,7 +36,7 @@ class FrontController
         if(! ($controllerObject instanceof ControllerInterface) ) {
             throw new MvcException("'$controllerClassName' non implementa 'ControllerInterface'");
         }
-        $methodName = $this->convertUnderscoresTocamelCase($action);
+        $methodName = $this->convertTocamelCase($action);
         if(!method_exists($controllerObject, $methodName)) {
             throw new MvcException("Azione non implementata: '$methodName'");
         }
@@ -45,14 +45,14 @@ class FrontController
     }
 
     /**
-     * Converte undersconre a camelCase: per esempio 'una_stringa'
-     * diventa 'unaStringa'
+     * Converte underscore o '-' a camelCase: per esempio 'una_stringa-lunga'
+     * diventa 'unaStringaLunga'
      *
      * @param string $str
      * @return string
      */
-    private function convertUnderscoresTocamelCase($str)
+    private function convertTocamelCase($str)
     {
-        return lcfirst(str_replace(' ','',ucwords(str_replace('_',' ',$str))));
+        return lcfirst(str_replace(' ','',ucwords(str_replace(['_','-'],' ',$str))));
     }
 }
