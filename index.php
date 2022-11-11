@@ -1,6 +1,8 @@
 <?php 
 
 use XPort\Auth;
+use XPort\Mvc\FrontController;
+use XPort\Mvc\MvcException;
 
 include 'vendor/autoload.php';
 include 'config.php';
@@ -14,12 +16,12 @@ if(!Auth::isLogged()) {
     return;
 }
 
-
-$page = $_GET['page'] ?? 'dashboard';
-
+$controller = $_GET['controller'] ?? 'dashboard';
+$action = $_GET['action'] ?? 'index';
+$frontController = new FrontController($templateEngine);
 try {
-    echo $templateEngine->render($page);
+    echo $frontController->process($controller,$action);
 }
-catch(\Exception $e) {
-    echo $templateEngine->render('error404',['message' => 'Pagina inesistente']);
+catch(MvcException $e) {
+    echo $templateEngine->render('error404',['message' => $e->getMessage()]);
 }
