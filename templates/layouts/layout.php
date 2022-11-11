@@ -59,25 +59,25 @@
         <nav class="sidebar sidebar-offcanvas" id="sidebar">
         <ul class="nav">
           <li class="nav-item">
-            <a class="nav-link" href="index.html">
+            <a class="nav-link" href="/">
               <i class="typcn typcn-device-desktop menu-icon"></i>
               <span class="menu-title">Dashboard</span>
             </a>
           </li>
           <li class="nav-item">
-              <a class="nav-link" href="index.html">
+              <a class="nav-link" href="/">
                   <i class="typcn typcn-user-outline menu-icon"></i>
                   <span class="menu-title">Store</span>
               </a>
           </li>
           <li class="nav-item">
-              <a class="nav-link" href="index.html">
+              <a class="nav-link" href="/prodotti">
                   <i class="typcn typcn-dropbox menu-icon"></i>
                   <span class="menu-title">Prodotti</span>
               </a>
           </li>
           <li class="nav-item">
-              <a class="nav-link" href="index.html">
+              <a class="nav-link" href="/">
                   <i class="typcn typcn-shopping-cart menu-icon"></i>
                   <span class="menu-title">Ordini</span>
               </a>
@@ -119,8 +119,5 @@
     <script src="../../vendors/progressbar.js/progressbar.min.js"></script>
     <script src="../../vendors/chart.js/Chart.min.js"></script>
     <!-- End plugin js for this page -->
-    <!-- Custom js for this page-->
-    <script src="../../js/dashboard.js"></script>
-    <!-- End custom js for this page-->
   </body>
 </html>
