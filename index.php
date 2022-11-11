@@ -23,5 +23,5 @@ try {
     echo $frontController->process($controller,$action);
 }
 catch(MvcException $e) {
-    echo $templateEngine->render('error404',['message' => $e->getMessage()]);
+    echo $templateEngine->render('error-pages/404',['message' => $e->getMessage()]);
 }

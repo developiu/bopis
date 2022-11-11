@@ -1,3 +1,4 @@
+<?php  /** @var string $message (importato dal controller) */ ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,7 +6,7 @@
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>CelestialUI Admin</title>
+  <title>X-Port Click & Collect</title>
   <!-- base:css -->
   <link rel="stylesheet" href="../../vendors/typicons.font/font/typicons.css">
   <link rel="stylesheet" href="../../vendors/css/vendor.bundle.base.css">
