@@ -2,24 +2,10 @@
 
 namespace XPort\Mvc\Controller;
 
-use XPort\Mvc\ControllerInterface;
-use League\Plates\Engine as RendererEngine;
+use XPort\Mvc\AbstractController;
 
-class Dashboard implements ControllerInterface
+class Dashboard extends AbstractController
 {
-    /** @var RendererEngine */
-    private $renderer;
-
-    public function __construct(RendererEngine $renderer)
-    {
-        $this->renderer = $renderer;
-    }
-
-    public function getRenderer()
-    {
-        return $this->renderer;
-    }
-
     public function index()
     {
         echo $this->getRenderer()->render('dashboard/index');

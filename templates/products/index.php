@@ -1,13 +1,10 @@
 <?php
 
-use XPort\Mapper\ProductMapper;
 use XPort\StringUtils;
 
-$mapper = new ProductMapper();
-$prodotti = $mapper->fetchAll();
-
-
 $this->layout('layouts/layout');
+
+/** @var array $prodotti (importata dal controller) */
 ?>
 
 <div class="card">
