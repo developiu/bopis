@@ -14,5 +14,26 @@ class Products extends AbstractController
 
         echo $this->getRenderer()->render('products/index',['prodotti' => $prodotti]);
     }
+
+    public function updateQuantity()
+    {
+        $productId = $_GET['pid'] ?? null;
+        if($productId === null) {
+            echo json_encode(['status' => false]);
+            exit;
+        }
+
+        $newQuantity = $_GET['qty'] ?? 1;
+        $mapper = new ProductMapper();
+
+        $result = $mapper->update($productId, 'quantity', $newQuantity);
+        if($result === false) {
+            echo json_encode(['status' => false]);
+            exit;
+        }
+
+        echo json_encode(['status' => true, 'updated' => $result]);
+        exit;
+    }
     
 }

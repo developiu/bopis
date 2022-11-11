@@ -25,4 +25,25 @@ class ProductMapper
 
         return $statement->fetchAll();
     }
+
+    /**
+     * @param int $productId
+     * @param string $field
+     * @param string $newValue
+     * @return bool|int false in caso di errore, altrimenti il numero di elementi modificati (0 o 1)
+     */
+    public function update($productId,$field,$newValue)
+    {
+        $affected = $this->pdo->exec('UPDATE products set ' . $field . '=' . $newValue . ' WHERE id=' . $productId);
+        if($affected === false) {
+            return false;
+        }
+        if($affected) {
+            $this->pdo->exec('UPDATE products set synced=0 WHERE id=' . $productId);
+            return 1;
+        }
+
+        return 0;
+    }
+
 }
