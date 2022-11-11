@@ -10,15 +10,15 @@ include 'config.php';
 session_start();
 
 $templateEngine = new League\Plates\Engine('templates');
+$frontController = new FrontController($templateEngine);
 
 if(!Auth::isLogged()) {
-    echo $templateEngine->render('login');
+    $frontController->process('auth','login');
     return;
 }
 
 $controller = $_GET['controller'] ?? 'dashboard';
 $action = $_GET['action'] ?? 'index';
-$frontController = new FrontController($templateEngine);
 try {
     echo $frontController->process($controller,$action);
 }

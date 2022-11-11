@@ -1,20 +1,4 @@
-<?php
-
-use XPort\Auth;
-
-$message = '&nbsp';
-if($_POST) {
-        $accessCode = $_POST['access_code'] ?? '';
-        if(Auth::login($accessCode)) {
-            header('location: /');
-            return;
-        }
-        else {
-            $message = "Credenziali invalide, riprovare";
-        }
-    }
-
-?>
+<?php  /** @var string $message (importato dal controller) */ ?>
 <!DOCTYPE html>
 <html lang="en">
 
