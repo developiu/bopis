@@ -65,10 +65,12 @@ $this->layout('layouts/layout');
                 data: { qty: newQuantity, pid: productId },
                 success: function(data) {
                     if(data.status == false) {
+                        jQuery.notify("Errore durante l'aggiornamento della quantità",{type: 'danger'});
                         return;
                     }
                     if(data.updated == 1) {
                         jQuery(btn).closest('tr').find('.sync-label').html('<label class="badge badge-danger">Da sincronizzare</label>');
+                        jQuery.notify("Quantità associata al prodotto aggiornata",{type: 'success'});
                     }
                 }
             });

@@ -14,6 +14,9 @@
     <!-- inject:css -->
     <link rel="stylesheet" href="../../css/vertical-layout-light/style.css">
     <!-- endinject -->
+    <!-- jquery notification: custom modification -->
+    <link rel="stylesheet" href="/css/notify.css">
+    <!-- end jquery notification-->
     <link rel="shortcut icon" href="../../images/favicon.png" />
   </head>
   <body>
@@ -119,5 +122,8 @@
     <script src="../../vendors/progressbar.js/progressbar.min.js"></script>
     <script src="../../vendors/chart.js/Chart.min.js"></script>
     <!-- End plugin js for this page -->
+    <!-- jquery notification: custom modification -->
+    <script src="/js/notify.js"></script>
+    <!-- end jquery notification-->
   </body>
 </html>
