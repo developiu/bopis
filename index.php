@@ -9,7 +9,7 @@ include 'config.php';
 
 session_start();
 
-$templateEngine = new League\Plates\Engine('templates');
+$templateEngine = new League\Plates\Engine('views');
 $frontController = new FrontController($templateEngine);
 
 if(!Auth::isLogged()) {
