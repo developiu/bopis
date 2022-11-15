@@ -17,6 +17,9 @@
     <!-- jquery notification: custom modification -->
     <link rel="stylesheet" href="/css/notify.css">
     <!-- end jquery notification-->
+    <!-- barcode scanner syles -->
+    <link rel="stylesheet" href="/css/barcode_overlay.css">
+    <!-- end barcode overlay styles -->
     <link rel="shortcut icon" href="../../images/favicon.png" />
   </head>
   <body>
@@ -105,6 +108,8 @@
       </div>
       <!-- page-body-wrapper ends -->
     </div>
+
+    <div id="main-barcode-overlay" class="barcode-overlay" tabindex="-1"></div>
     <!-- container-scroller -->
     <!-- base:js -->
     <script src="../../vendors/js/vendor.bundle.base.js"></script>
@@ -125,5 +130,6 @@
     <!-- jquery notification: custom modification -->
     <script src="/js/notify.js"></script>
     <!-- end jquery notification-->
+    <script src="/js/barcode_scanner.js"></script>
   </body>
 </html>
