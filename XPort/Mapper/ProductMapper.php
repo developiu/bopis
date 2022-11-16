@@ -115,4 +115,22 @@ class ProductMapper
         return $statement->rowCount()>0;
     }
 
+    /**
+     * Elimina il prodotto di dato id
+     *
+     * @param int $id
+     * @return int True se il prodotto esisteva ed è stato eliminato, false altrimenti
+     * @throws \RuntimeException in caso di errore nell'esecuzione della query
+     */
+    public function deleteProduct($id)
+    {
+        $statement = $this->pdo->prepare("DELETE FROM products WHERE id=?");
+        if($statement === false) {
+            throw new \RuntimeException("Errore di database");
+        }
+        $statement->execute([ $id ]);
+
+        return $statement->rowCount()>0;
+    }
+
 }

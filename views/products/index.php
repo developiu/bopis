@@ -26,6 +26,7 @@ $this->layout('layouts/layout');
                         <th>SKU</th>
                         <th>Quantità</th>
                         <th>Sincronizzato</th>
+                        <th>Azioni</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -42,6 +43,9 @@ $this->layout('layouts/layout');
                             <?php else: ?>
                                 <label class="badge badge-danger">Da sincronizzare</label>
                             <?php endif ?>
+                        </td>
+                        <td class="text-center">
+                            <a href="/products/delete-product?id=<?= $prodotto['id'] ?>"><i class="typcn typcn-trash"></i></a>
                         </td>
                     </tr>
                 <?php endforeach ?>

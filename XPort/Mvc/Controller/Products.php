@@ -64,6 +64,19 @@ class Products extends AbstractController
         exit;
     }
 
+    public function deleteProduct()
+    {
+        if(!isset($_GET['id'])) {
+            http_response_code(403);
+            echo $this->getRenderer()->render('error-pages/general_error',['error_code' => 403,'message' => "Accesso vietato"]);
+            exit;
+        }
+        $id = intval($_GET['id']);
+        $mapper = new ProductMapper();
+        $mapper->deleteProduct($id);
+        header("location: /products");
+    }
+
     private function saveProduct()
     {
         $id = $_POST['id'] ?? null;
