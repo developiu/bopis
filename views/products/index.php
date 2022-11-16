@@ -12,7 +12,7 @@ $this->layout('layouts/layout');
         <h4 class="card-title">Prodotti</h4>
 
         <form class="form-inline flex-row-reverse">
-            <button type="button" class="btn btn-primary update-products-button m-1">Aggiorna quantità</button>
+            <button type="button" class="btn btn-primary update-products-button m-1 disabled" title="non ancora implementato">Aggiorna quantità</button>
             <button type="button" class="btn btn-primary update-create-product m-1">Aggiorna/Crea prodotto</button>
         </form>
         <div class="table-responsive">
