@@ -77,7 +77,8 @@ $this->layout('layouts/layout');
         jQuery("#product-table").dataTable({
             language: {
                 url: '/js/datatables_it_plugin.json'
-            }
+            },
+            stateSave: true
         });
 
         jQuery(".update-quantity-selector").change(function() {
