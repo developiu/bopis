@@ -2,15 +2,17 @@
 
 namespace XPort\Mapper;
 
+use PDO;
+
 class ProductMapper
 {
-    /** @var \PDO */
+    /** @var PDO */
     private $pdo;
 
     public function __construct()
     {
          $dsn = 'mysql:host=' . DBHOST . ';dbname=' . DBNAME;
-         $this->pdo = new \PDO( $dsn,DBUSER, DBPASS);
+         $this->pdo = new PDO( $dsn,DBUSER, DBPASS);
     }
 
     /**
@@ -44,6 +46,73 @@ class ProductMapper
         }
 
         return 0;
+    }
+
+    /**
+     * Prende come argomento l'ean di un prodotto e ritorna null se non esiste un prodotto con tale ean; se invece
+     * tale prodotto esiste ritorna l'array con i campi del prodotto.
+     *
+     * @param string $ean
+     * @return array|null
+     * @throws \RuntimeException in caso di errore nell'esecuzione della query
+     * @throws \LogicException se è presente più di un prodotto con l'EAN specificato
+     */
+    public function getByEan($ean)
+    {
+        $statement = $this->pdo->prepare("SELECT * FROM products WHERE ean=?");
+        if($statement == false) {
+            throw new \RuntimeException("Errore di database");
+        }
+        $statement->execute([$ean]);
+        $products = $statement->fetchAll(PDO::FETCH_ASSOC);
+        if(empty($products)) {
+            return null;
+        }
+
+        if(count($products) > 1) {
+            throw new \LogicException("Esiste più di un prodotto con l'EAN specificato");
+        }
+
+        return $products[0];
+    }
+
+    /**
+     * Crea un prodotto con i campi specificati dall'array
+     *
+     * @param array $product
+     * @return void
+     * @throws \RuntimeException in caso di errore nell'esecuzione della query
+     */
+    public function createProduct($product)
+    {
+        $statement = $this->pdo->prepare("INSERT INTO products(name,quantity,sku,asin,ean) VALUES(?,?,?,?,?)");
+        if($statement == false) {
+            throw new \RuntimeException("Errore di database");
+        }
+        $statement->execute([$product['name'],$product['quantity'],$product['sku'],$product['asin'],$product['ean'] ]);
+    }
+
+    /**
+     * Aggiorna il prodotto di dato id con i campi specificati dall'array
+     *
+     * @param array $product
+     * @param int $id
+     * @return int True se il prodotto esisteva ed è stato modificato, false altrimenti
+     * @throws \RuntimeException in caso di errore nell'esecuzione della query
+     */
+    public function updateProduct($product, $id)
+    {
+        $statement = $this->pdo->prepare("UPDATE products SET name=?, quantity=?,sku=?, asin=?, ean=? WHERE id=?");
+        if($statement === false) {
+            throw new \RuntimeException("Errore di database");
+        }
+        $statement->execute([$product['name'],$product['quantity'],$product['sku'],$product['asin'],$product['ean'], $id ]);
+        if($statement->rowCount() > 0) {
+            $this->update($id, 'synced',0);
+        }
+
+
+        return $statement->rowCount()>0;
     }
 
 }

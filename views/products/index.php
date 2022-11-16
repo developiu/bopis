@@ -12,7 +12,8 @@ $this->layout('layouts/layout');
         <h4 class="card-title">Prodotti</h4>
 
         <form class="form-inline flex-row-reverse">
-            <button type="button" class="btn btn-primary update-products-button">Aggiorna quantità</button>
+            <button type="button" class="btn btn-primary update-products-button m-1">Aggiorna quantità</button>
+            <button type="button" class="btn btn-primary update-create-product m-1">Aggiorna/Crea prodotto</button>
         </form>
         <div class="table-responsive">
             <table class="table table-striped">
@@ -50,6 +51,25 @@ $this->layout('layouts/layout');
     </div>
 </div>
 
+<!-- Modal usata per creare/modificare i prodotti -->
+<div class="modal fade" id="product-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Annulla</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 <script>
@@ -75,5 +95,27 @@ $this->layout('layouts/layout');
                 }
             });
         });
+
+        jQuery(".update-create-product").click(function() {
+            get_from_barcode_scanner("#main-barcode-overlay")
+                .then((ean) => {
+                    jQuery.ajax({
+                        url: '/products/update-product-modal',
+                        data: { ean: ean },
+                        method: 'GET',
+                        dataType: 'json',
+                        success: function(data) {
+                            jQuery("#product-modal").on("show.bs.modal", function (e) {
+                                jQuery("#product-modal .modal-title").html(data.title);
+                                jQuery("#product-modal .modal-body").html(data.form);
+                            }).modal('show');
+                        }
+                    });
+                })
+                .catch( () => {
+                    jQuery.notify("Per favore inserisci un barcode da scanner",{ type: "danger"});
+                });
+        });
     });
+
 </script>
