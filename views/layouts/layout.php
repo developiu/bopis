@@ -20,7 +20,7 @@
     <!-- barcode scanner syles -->
     <link rel="stylesheet" href="/css/barcode_overlay.css">
     <!-- end barcode overlay styles -->
-    <link rel="shortcut icon" href="../../images/favicon.png" />
+    <link rel="shortcut icon" href="images/favicon.png" />
   </head>
   <body>
     <div class="container-scroller">

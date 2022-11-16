@@ -16,7 +16,13 @@
   <!-- inject:css -->
   <link rel="stylesheet" href="../../css/vertical-layout-light/style.css">
   <!-- endinject -->
-  <link rel="shortcut icon" href="../../images/favicon.png" />
+  <!-- jquery notification: custom modification -->
+  <link rel="stylesheet" href="/css/notify.css">
+  <!-- end jquery notification-->
+  <!-- barcode scanner syles -->
+  <link rel="stylesheet" href="/css/barcode_overlay.css">
+  <!-- end barcode overlay styles -->
+  <link rel="shortcut icon" href="/images/favicon.png" />
 </head>
 
 <body>
@@ -31,12 +37,20 @@
               </div>
               <h4>Inserisci il tuo codice di accesso per entrare nel sistema</h4>
               <p class="text-primary"><?= $message ?></p>
-              <form class="pt-3" method="post">
+              <form id="login-form" class="pt-3" method="post">
                 <div class="form-group">
                   <input type="password" name="access_code" class="form-control form-control-lg" id="exampleInputEmail1" placeholder="Codice di accesso">
                 </div>
-                <div class="mt-3">
-                  <button type="submit" class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn">ENTRA</button>
+                <div class="row align-items-stretch">
+                    <div class="col-7 mt-3">
+                        <button type="submit" class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn">ENTRA</button>
+                    </div>
+                    <div class="col-1 mt-3" style="font-size: 50px">
+                        /
+                    </div>
+                    <div class="col-4 mt-3">
+                        <a class="read-scanner" href=""><img src="/images/barcode_example.png" alt="entra con il barcode" /></a>
+                    </div>
                 </div>
               </form>
             </div>
@@ -47,6 +61,9 @@
     </div>
     <!-- page-body-wrapper ends -->
   </div>
+
+  <div id="main-barcode-overlay" class="barcode-overlay" tabindex="-1"></div>
+
   <!-- container-scroller -->
   <!-- base:js -->
   <script src="../../vendors/js/vendor.bundle.base.js"></script>
@@ -58,6 +75,25 @@
   <script src="../../js/settings.js"></script>
   <script src="../../js/todolist.js"></script>
   <!-- endinject -->
+  <!-- jquery notification: custom modification -->
+  <script src="/js/notify.js"></script>
+  <!-- end jquery notification-->
+  <script src="/js/barcode_scanner.js"></script>
+
+  <script>
+      jQuery(".read-scanner").click(function(e) {
+          e.preventDefault();
+          get_from_barcode_scanner("#main-barcode-overlay")
+              .then((ean) => {
+                  jQuery('[type=password]').val(ean);
+                  jQuery('#login-form').submit();
+              })
+              .catch( () => {
+                  jQuery.notify("Per favore inserisci un barcode da scanner",{ type: "danger"});
+              });
+      });
+  </script>
+
 </body>
 
 </html>
