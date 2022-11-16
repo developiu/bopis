@@ -15,8 +15,8 @@ $this->layout('layouts/layout');
             <button type="button" class="btn btn-primary update-products-button m-1 disabled" title="non ancora implementato">Aggiorna quantità</button>
             <button type="button" class="btn btn-primary update-create-product m-1">Aggiorna/Crea prodotto</button>
         </form>
-        <div class="table-responsive">
-            <table class="table table-striped">
+        <div class="table-responsive mt-3">
+            <table id="product-table" class="table table-striped">
                 <thead>
                     <tr>
                         <th>Id</th>
@@ -74,6 +74,12 @@ $this->layout('layouts/layout');
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        jQuery("#product-table").dataTable({
+            language: {
+                url: '/js/datatables_it_plugin.json'
+            }
+        });
+
         jQuery(".update-quantity-selector").change(function() {
             let btn = jQuery(this);
             let newQuantity = jQuery(this).val();

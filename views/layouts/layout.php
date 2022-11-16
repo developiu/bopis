@@ -21,6 +21,9 @@
     <link rel="stylesheet" href="/css/barcode_overlay.css">
     <!-- end barcode overlay styles -->
     <link rel="shortcut icon" href="images/favicon.png" />
+    <!-- datatable styles -->
+    <link rel="stylesheet" href="/node_modules/datatables.net-bs4/css/dataTables.bootstrap4.min.css">
+    <!-- end datatable styles -->
   </head>
   <body>
     <div class="container-scroller">
@@ -131,5 +134,9 @@
     <script src="/js/notify.js"></script>
     <!-- end jquery notification-->
     <script src="/js/barcode_scanner.js"></script>
+    <!-- datatable -->
+    <script src="/node_modules/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="/node_modules/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <!-- end datatable  -->
   </body>
 </html>
