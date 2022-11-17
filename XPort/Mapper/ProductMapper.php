@@ -3,6 +3,7 @@
 namespace XPort\Mapper;
 
 use PDO;
+use RuntimeException;
 
 class ProductMapper
 {
@@ -54,14 +55,14 @@ class ProductMapper
      *
      * @param string $ean
      * @return array|null
-     * @throws \RuntimeException in caso di errore nell'esecuzione della query
+     * @throws RuntimeException in caso di errore nell'esecuzione della query
      * @throws \LogicException se è presente più di un prodotto con l'EAN specificato
      */
     public function getByEan($ean)
     {
         $statement = $this->pdo->prepare("SELECT * FROM products WHERE ean=?");
         if($statement == false) {
-            throw new \RuntimeException("Errore di database");
+            throw new RuntimeException("Errore di database");
         }
         $statement->execute([$ean]);
         $products = $statement->fetchAll(PDO::FETCH_ASSOC);
@@ -77,17 +78,46 @@ class ProductMapper
     }
 
     /**
+     * Ritorna i prodotti il cui campo $field vale $value. Se $value è un array ritorna i prodotti il cui campo $field
+     * è uno dei valori dell'array.
+     *
+     * @param string $field
+     * @param string|array $value
+     * @return array
+     * @throws RuntimeException In caso di errore nell'esecuzione della query
+     */
+    public function getProductsByField($field,$value)
+    {
+        if(is_array($value)) {
+            $fieldCondition = count($value)>0 ? " $field IN (" . implode(',',array_fill(0,count($value),'?')) . ")" : "1=0";
+            $query = "SELECT * FROM products WHERE $fieldCondition";
+        }
+        else {
+            $query = "SELECT * FROM products WHERE $field=?";
+        }
+
+        //$query = is_array($value) ? "SELECT * FROM products WHERE $field IN (" . implode(", ",$value) .  ")" : "SELECT * FROM products WHERE $field=?";
+
+        $statement = $this->pdo->prepare($query);
+        if($statement == false) {
+            throw new RuntimeException("Errore di database");
+        }
+        $statement->execute($value);
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
      * Crea un prodotto con i campi specificati dall'array
      *
      * @param array $product
      * @return void
-     * @throws \RuntimeException in caso di errore nell'esecuzione della query
+     * @throws RuntimeException in caso di errore nell'esecuzione della query
      */
     public function createProduct($product)
     {
         $statement = $this->pdo->prepare("INSERT INTO products(name,quantity,sku,asin,ean) VALUES(?,?,?,?,?)");
         if($statement == false) {
-            throw new \RuntimeException("Errore di database");
+            throw new RuntimeException("Errore di database");
         }
         $statement->execute([$product['name'],$product['quantity'],$product['sku'],$product['asin'],$product['ean'] ]);
     }
@@ -98,13 +128,13 @@ class ProductMapper
      * @param array $product
      * @param int $id
      * @return int True se il prodotto esisteva ed è stato modificato, false altrimenti
-     * @throws \RuntimeException in caso di errore nell'esecuzione della query
+     * @throws RuntimeException in caso di errore nell'esecuzione della query
      */
     public function updateProduct($product, $id)
     {
         $statement = $this->pdo->prepare("UPDATE products SET name=?, quantity=?,sku=?, asin=?, ean=? WHERE id=?");
         if($statement === false) {
-            throw new \RuntimeException("Errore di database");
+            throw new RuntimeException("Errore di database");
         }
         $statement->execute([$product['name'],$product['quantity'],$product['sku'],$product['asin'],$product['ean'], $id ]);
         if($statement->rowCount() > 0) {
@@ -120,17 +150,21 @@ class ProductMapper
      *
      * @param int $id
      * @return int True se il prodotto esisteva ed è stato eliminato, false altrimenti
-     * @throws \RuntimeException in caso di errore nell'esecuzione della query
+     * @throws RuntimeException in caso di errore nell'esecuzione della query
      */
     public function deleteProduct($id)
     {
         $statement = $this->pdo->prepare("DELETE FROM products WHERE id=?");
         if($statement === false) {
-            throw new \RuntimeException("Errore di database");
+            throw new RuntimeException("Errore di database");
         }
         $statement->execute([ $id ]);
 
         return $statement->rowCount()>0;
     }
 
+    public function getAdapter(): PDO
+    {
+        return $this->pdo;
+    }
 }

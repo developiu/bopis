@@ -14,6 +14,15 @@ $this->layout('layouts/layout');
         <form class="form-inline flex-row-reverse">
             <button type="button" class="btn btn-primary update-products-button m-1 disabled" title="non ancora implementato">Aggiorna quantità</button>
             <button type="button" class="btn btn-primary update-create-product m-1">Aggiorna/Crea prodotto</button>
+            <div class="form-group">
+                <input type="file" name="product-csv-file" class="file-upload-default">
+                <div class="input-group">
+                    <input type="text" class="form-control file-upload-info" placeholder="Importa prodotti">
+                    <span class="input-group-append">
+                          <button class="file-upload-browse btn btn-primary" type="button">Carica</button>
+                        </span>
+                </div>
+            </div>
         </form>
         <div class="table-responsive mt-3">
             <table id="product-table" class="table table-striped">
@@ -75,7 +84,6 @@ $this->layout('layouts/layout');
     </div>
 </div>
 
-
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         jQuery("#product-table").dataTable({
@@ -127,6 +135,32 @@ $this->layout('layouts/layout');
                     jQuery.notify("Per favore inserisci un barcode da scanner",{ type: "danger"});
                 });
         });
+
+
+    jQuery('.file-upload-browse').on('click', function() {
+      var file = jQuery(this).parent().parent().parent().find('.file-upload-default');
+      file.trigger('click');
+    });
+    jQuery('.file-upload-default').on('change', function() {
+      jQuery(this).parent().find('.form-control').val(jQuery(this).val().replace(/C:\\fakepath\\/i, ''));
+      let file = jQuery(this)[0].files[0];
+      let formData = new FormData();
+      formData.append('csv',file);
+      let request = new XMLHttpRequest();
+      request.open('POST', 'http://cac.xport.test/products/import-from-csv');
+      request.onload = function() {
+          let data = JSON.parse(request.response);
+          if(data.status=='success') {
+              window.location.reload();
+              return;
+          }
+          jQuery.notify(data.message,{type: 'danger', delay: 1000*60*60, close: true});
+      };
+      request.send(formData);
+
+    });
+
+
     });
 
 </script>

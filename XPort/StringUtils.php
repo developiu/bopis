@@ -2,6 +2,8 @@
 
 namespace XPort;
 
+use DomainException;
+
 class StringUtils
 {
     /**
@@ -22,6 +24,28 @@ class StringUtils
         }
 
         return $str;
+    }
+
+    /**
+     * Prende in input una stringa contenente un csv multi linea, dove ogni riga
+     * è separata da una sequenza di caratteri in $delimiter e la converte in un array
+     * di array.
+     *
+     * @param string $csv
+     * @param string $delimiter
+     * @return array
+     */
+    public static function convertCsvToArray(string $csv, string $delimiter="\r\n"):array
+    {
+        $csv = str_replace(str_split($delimiter,1), "\n", $csv);
+        $csv = array_filter(explode("\n",$csv));
+
+        $data = [];
+        foreach($csv as $line) {
+            $data[] = str_getcsv($line);
+        }
+
+        return $data;
     }
 
 }
