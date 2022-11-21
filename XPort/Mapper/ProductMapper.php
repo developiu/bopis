@@ -149,7 +149,7 @@ class ProductMapper
      * Elimina il prodotto di dato id
      *
      * @param int $id
-     * @return int True se il prodotto esisteva ed è stato eliminato, false altrimenti
+     * @return bool True se il prodotto esisteva ed è stato eliminato, false altrimenti
      * @throws RuntimeException in caso di errore nell'esecuzione della query
      */
     public function deleteProduct($id)

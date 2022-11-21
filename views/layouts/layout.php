@@ -17,7 +17,7 @@
     <!-- jquery notification: custom modification -->
     <link rel="stylesheet" href="/css/notify.css">
     <!-- end jquery notification-->
-    <!-- barcode scanner syles -->
+    <!-- barcode scanner styles -->
     <link rel="stylesheet" href="/css/barcode_overlay.css">
     <!-- end barcode overlay styles -->
     <link rel="shortcut icon" href="images/favicon.png" />
@@ -86,7 +86,7 @@
               </a>
           </li>
           <li class="nav-item">
-              <a class="nav-link" href="/">
+              <a class="nav-link" href="/orders">
                   <i class="typcn typcn-shopping-cart menu-icon"></i>
                   <span class="menu-title">Ordini</span>
               </a>
