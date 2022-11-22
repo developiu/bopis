@@ -27,4 +27,30 @@ class Orders extends AbstractController
         $mapper->deleteOrder($id);
         header("location: /orders");
     }
+
+    /**
+     * Accetta due parametri: id e status; id può essere una stringa o un array di stringhe. Se id è una stringa
+     * aggiorna lo status dell'ordine corrispondente, altrimenti di tutti gli ordini corrispondenti.
+     */
+    public function updateStatus()
+    {
+        if(!isset($_GET['id']) || !isset($_GET['status'])) {
+            echo json_encode(['status' => 'error', 'message' => "Alcuni parametri obbligatori non sono stati specificati"]);
+            exit;
+        }
+        $orderMapper = new OrderMapper();
+
+        $ids = $_GET['id'];
+
+        $status = $_GET['status'];
+        if(!in_array($status, $orderMapper->getAllowedStatuses())) {
+            echo json_encode(['status' => 'error', 'message' => "Lo stato '{$_GET['status']}' non è ammesso"]);
+            exit;
+        }
+
+        $orderMapper->updateOrderStatus($ids, $status);
+
+        echo json_encode(['status' => 'success']);
+        exit;
+    }
 }

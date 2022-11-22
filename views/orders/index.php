@@ -12,17 +12,18 @@ $this->layout('layouts/layout');
         <h4 class="card-title">Ordini</h4>
 
         <form class="form-inline flex-row-reverse">
-<!--            <button type="button" class="btn btn-primary update-products-button m-1 disabled" title="non ancora implementato">Aggiorna quantità</button>-->
-<!--            <button type="button" class="btn btn-primary update-create-product m-1">Aggiorna/Crea prodotto</button>-->
-<!--            <div class="form-group">-->
-<!--                <input type="file" name="product-csv-file" class="file-upload-default">-->
-<!--                <div class="input-group">-->
-<!--                    <input type="text" class="form-control file-upload-info" placeholder="Importa prodotti">-->
-<!--                    <span class="input-group-append">-->
-<!--                          <button class="file-upload-browse btn btn-primary" type="button">Carica</button>-->
-<!--                        </span>-->
-<!--                </div>-->
-<!--            </div>-->
+            <div class="input-group">
+                <select>
+                    <option value="NEW">Nuovo</option>
+                    <option value="CANCELLED">Cancellato</option>
+                    <option value="READY_FOR_PICKUP">Pronto all'aquisto</option>
+                    <option value="PICKED_UP">Acquistato</option>
+                    <option value="REFOUNDED">Rimborsato</option>
+                </select>
+                <div class="input-group-append">
+                    <button class="btn btn-primary update-status-button" type="button">Notifica amazon</button>
+                </div>
+            </div>
         </form>
         <div class="table-responsive mt-3">
             <table id="order-table" class="table table-striped">
@@ -40,9 +41,9 @@ $this->layout('layouts/layout');
                 <tbody>
                 <?php foreach ($ordini as $ordine): ?>
                     <?php $dateObj = new DateTime($ordine['creation_date']) ?>
-                    <tr>
+                    <tr data-order-id="<?= $ordine['id'] ?>">
                         <td class="py-1 text-center">
-                            <input type="checkbox" value="1">
+                            <input class="selection-checkbox" type="checkbox" value="1">
                         </td>
                         <td><?= $ordine['id']?></td>
                         <td><?= $dateObj->format('d/m/Y') ?></td>
@@ -67,6 +68,28 @@ $this->layout('layouts/layout');
                 url: '/js/datatables_it_plugin.json'
             },
             stateSave: true
+        });
+
+        jQuery(".update-status-button").click(function() {
+            let newStatus = jQuery(this).closest(".input-group").find("select").val();
+            let orderIds = jQuery("#order-table")
+                .find(".selection-checkbox:checked").closest("tr")
+                .map(function() { return jQuery(this).data('order-id');});
+
+            jQuery.ajax({
+                url: '/orders/update-status',
+                data: { status: newStatus , id: jQuery.makeArray(orderIds) },
+                method: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    if(data.status=='success') {
+                        window.location.reload();
+                    }
+                    else {
+                        jQuery.notify(data.message,{type: 'danger'});
+                    }
+                }
+            });
         });
     });
 
