@@ -6,3 +6,5 @@ const DBUSER = 'root';
 const DBPASS = '';
 
 const USER_ACCESS_CODE = 'pass';
+
+const STORE_ID = 1;

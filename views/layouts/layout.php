@@ -44,7 +44,7 @@
                 <span class="nav-profile-name">Store</span>
               </a>
               <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
-                <a class="dropdown-item">
+                <a class="dropdown-item" href="/store">
                 <i class="typcn typcn-cog text-primary"></i>
                 Registrazione Store
                 </a>
@@ -74,7 +74,7 @@
             </a>
           </li>
           <li class="nav-item">
-              <a class="nav-link" href="/">
+              <a class="nav-link" href="/store">
                   <i class="typcn typcn-user-outline menu-icon"></i>
                   <span class="menu-title">Store</span>
               </a>
