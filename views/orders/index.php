@@ -65,6 +65,15 @@ $this->layout('layouts/layout');
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         jQuery("#order-table").dataTable({
+            columns: [
+                {name: "selection", orderable: false},
+                {name: "id", orderable: true},
+                {name: "creation_date", orderable: false},
+                {name: "username", orderable: true},
+                {name: "amount", orderable: true, type: "num"},
+                {name: "status", orderable: true},
+                {name: "actions", orderable: false}
+            ],
             language: {
                 url: '/js/datatables_it_plugin.json'
             },
