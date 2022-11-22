@@ -12,6 +12,7 @@ $this->layout('layouts/layout');
         <h4 class="card-title">Ordini</h4>
 
         <form class="form-inline flex-row-reverse">
+            <button type="button" class="btn btn-primary m-1 disabled" title="non ancora implementato">Importa ordini</button>
             <div class="input-group">
                 <select>
                     <option value="NEW">Nuovo</option>
