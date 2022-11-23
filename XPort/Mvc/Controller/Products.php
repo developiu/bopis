@@ -38,6 +38,72 @@ class Products extends AbstractController
         exit;
     }
 
+    /**
+     * Chiamata ajax: prende un parametro 'ean' e ritorna status:
+     *   - error se i parametri sono errati o se il prodotto non esiste; in tal caso 'message' conterrà un messaggio esplicativo
+     *   - success se il prodotto esiste; in questo caso la chiave product conterrà i dettagli del prodotto
+     */
+    public function getByEan()
+    {
+        header('Content-Type: application/json');
+        $ean = $_GET['ean'] ?? "";
+        if($ean === "") {
+            echo json_encode(['status' => 'error', 'message' => 'parametro ean mancante']);
+            exit;
+        }
+
+        $mapper = new ProductMapper();
+        $product = $mapper->getByEan($ean);
+        if($product === null) {
+            echo json_encode(['status' => 'error', 'message' => 'prodotto non registrato']);
+            exit;
+        }
+
+        echo json_encode(['status' => 'success', 'product' => $product]);
+        exit;
+    }
+
+    /**
+     * Chiamata ajax: prende un parametro un array di ean e riduce la quantità dei rispettivi prodotti di uno.
+     *
+     * Ritorna un json con un parametro status e con un corrispondente messaggio esplicativo. Il parametro
+     * 'ean' può essere un ean singolo o un array di ean (nel qual caso tutti i prodotti corrispondenti avranno la quantità
+     * corrispondente ridotta di 1). Il json ritornato ha la seguente struttura:
+     * [
+     *    'status' => success|error|warning (success se è andato tutto bene, error in caso di errore e warning se alcuni dei
+     *    prodotti hanno raggiunto una quantità minore o uguale di zero
+     * ]
+     */
+    public function reduceQuantityByEan()
+    {
+        header('Content-Type: application/json');
+        if([$_POST['ean']] === null) {
+            echo json_encode(['status' => 'error', 'message' => 'EAN non definiti']);
+            exit;
+        }
+
+        $eans = $_POST['ean'];
+        if(is_string($eans)) {
+            $eans = [ $eans ];
+        }
+
+        $problematicEans = [];
+        $mapper = new ProductMapper();
+        foreach($eans as $ean) {
+            $newQuantity = $mapper->decreaseQuantity($ean);
+            if($newQuantity <= 0) {
+                $problematicEans[$ean] = true;
+            }
+        }
+
+        if($problematicEans) {
+            echo json_encode(['status' => 'warning', 'message' => 'I seguenti prodotti risultano esauriti: ' . implode(", ", array_keys($problematicEans))]);
+            exit;
+        }
+
+        echo json_encode(['status' => 'success', 'message' => 'Quantità aggiornate']);
+    }
+    
     public function updateProductModal()
     {
         header('Content-Type: application/json');

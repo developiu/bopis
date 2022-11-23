@@ -50,6 +50,28 @@ class ProductMapper
     }
 
     /**
+     * @param string $ean l'ean del prodotto di cui si vuole ridurre la quantità
+     * @return bool|int false se nessun prodotto è stato aggiornato, altrimenti la quantità aggiornata del prodotto. Tale quantità
+     * può essere negativa (ad esempio se la quantità originale era 0, diventa -1)
+     * @throws RuntimeException In caso di errore nell'esecuzione della query
+     */
+    public function decreaseQuantity($ean)
+    {
+        $statement = $this->pdo->prepare("UPDATE products SET quantity=quantity-1, synced=0  WHERE ean=?");
+        if($statement == false) {
+            throw new RuntimeException("Errore di database");
+        }
+        $statement->execute([$ean]);
+        if($statement->rowCount()==0) {
+            return false;
+        }
+
+        $product = $this->getByEan($ean);
+
+        return $product['quantity'];
+    }
+
+    /**
      * Prende come argomento l'ean di un prodotto e ritorna null se non esiste un prodotto con tale ean; se invece
      * tale prodotto esiste ritorna l'array con i campi del prodotto.
      *

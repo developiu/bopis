@@ -91,6 +91,12 @@
                   <span class="menu-title">Ordini</span>
               </a>
           </li>
+          <li class="nav-item">
+              <a class="nav-link" href="/sales">
+                  <i class="typcn typcn-shopping-cart menu-icon"></i>
+                  <span class="menu-title">Vendite</span>
+              </a>
+          </li>
         </ul>
       </nav>
         <!-- partial -->

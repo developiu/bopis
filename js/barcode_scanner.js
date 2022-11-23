@@ -7,10 +7,12 @@
  *                resto dovrà essere stato predisposto via css. Può anche essere un selettore che punta a tale nodo.
  *                È fondamentale perché altrimenti l'utente potrebbe spostare il focus presso un altro elemento e la
  *                rivelazione del barcode scanner non funzionerebbe più.
- * @return Promise se l'utente ha premuto escape o return senza avere inserito nulla verrà chiamato il catch,
- *                 altrimenti il then con argomento la stringa inserita
+ * @param exitButton è il bottone che provoca la chiusura dello scan
+ * @param enterButton è il bottone che provoca l'accettazione dello scan (a meno che il buffer non sia vuoto)
+ * @return Promise se l'utente ha premuto escape o return senza avere inserito nulla verrà chiamato il catch passandogli,
+ *                 come parametro il tasto appena inserito, altrimenti il then con argomento la stringa inserita
  */
-function get_from_barcode_scanner(overlay) {
+function get_from_barcode_scanner(overlay, exitButton="Escape", enterButton="Enter") {
     /* helper functions */
     function exit_from_scan(overlay) {
         overlay.hide();
@@ -53,11 +55,11 @@ function get_from_barcode_scanner(overlay) {
         overlay.keyup(function(e) {
             buffer = deleteBufferFromHumanInput(buffer, e);
 
-            if(e.key == 'Escape' || (e.key == 'Enter' && buffer == ''))  {
+            if(e.key == exitButton || (e.key == enterButton && buffer == ''))  {
                  exit_from_scan(overlay);
-                 reject();
+                 reject(e.key);
             }
-            if(e.key == 'Enter') {
+            if(e.key == enterButton) {
                 // se siamo qui buffer non è vuoto
                 exit_from_scan(overlay);
                 resolve(buffer);
