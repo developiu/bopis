@@ -87,7 +87,7 @@
           </li>
           <li class="nav-item">
               <a class="nav-link" href="/orders">
-                  <i class="typcn typcn-shopping-cart menu-icon"></i>
+                  <i class="typcn typcn-archive menu-icon"></i>
                   <span class="menu-title">Ordini</span>
               </a>
           </li>
