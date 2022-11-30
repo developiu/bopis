@@ -46,7 +46,7 @@ $this->layout('layouts/layout');
                         <td class="py-1 text-center">
                             <input class="selection-checkbox" type="checkbox" value="1">
                         </td>
-                        <td><?= $ordine['id']?></td>
+                        <td class="cell-id"><?= $ordine['id']?></td>
                         <td><?= $dateObj->format('d/m/Y') ?></td>
                         <td><?= $ordine['user_name'] ?></td>
                         <td><?= $ordine['amount']?></td>
@@ -92,8 +92,21 @@ $this->layout('layouts/layout');
                 method: 'GET',
                 dataType: 'json',
                 success: function(data) {
+                    jQuery(".cell-id").removeAttr("style");
                     if(data.status=='success') {
                         window.location.reload();
+                    }
+                    else if(data.status=='incomplete') {
+                        let problematicIds = data.problematic_ids;
+                        console.log(problematicIds);
+                        for(id of problematicIds) {
+                            console.log(id);
+                        }
+                        problematicIds.forEach(function(id) {
+                            jQuery("tr[data-order-id="+id+"] > .cell-id").css('color','red');
+                            jQuery.notify(data.message,{type: 'danger'});
+                            setTimeout(function() { jQuery(".cell-id").removeAttr("style"); }, 15000)
+                        });
                     }
                     else {
                         jQuery.notify(data.message,{type: 'danger'});

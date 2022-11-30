@@ -31,6 +31,12 @@ class Orders extends AbstractController
     /**
      * Accetta due parametri: id e status; id può essere una stringa o un array di stringhe. Se id è una stringa
      * aggiorna lo status dell'ordine corrispondente, altrimenti di tutti gli ordini corrispondenti.
+     *
+     * La risposta può essere una delle seguenti:
+     * ['status' => 'success']: tutti gli ordini sono stati aggiornati
+     * ['status' => 'error', 'message' => <messaggio esplicativo>] è avvenuto un errore: nessuno stato è stato modificato
+     * ['status' => 'incomplete', 'problematic_ids' => [ .... ], 'message' => 'messaggio esplicativo' ]: non è spossibile
+     * modificare qualche ordine. problematic_ids contiene gli id degli ordini che non possono essere modificati
      */
     public function updateStatus()
     {
@@ -42,9 +48,24 @@ class Orders extends AbstractController
 
         $ids = $_GET['id'];
 
+
         $status = $_GET['status'];
         if(!in_array($status, $orderMapper->getAllowedStatuses())) {
             echo json_encode(['status' => 'error', 'message' => "Lo stato '{$_GET['status']}' non è ammesso"]);
+            exit;
+        }
+
+        $compatibleOrders = $orderMapper->ordersCompatibleWithNewStatus($_GET['status'], $ids);
+        $compatibleOrderIds = [];
+        foreach($compatibleOrders as $ord) {
+            $compatibleOrderIds[] = $ord['id'];
+        }
+
+        // riforziamo gli indici a partire da zero altrimenti json_encode traduce l'array come oggetto
+        $incompatibleOrderIds = array_values(array_diff($ids,$compatibleOrderIds));
+        if($incompatibleOrderIds) {
+            echo json_encode(['status' => 'incomplete', 'problematic_ids' => $incompatibleOrderIds,
+                'message' => "Lo stato degli ordini evidenziati è incompatibile con lo stato richiesto"]);
             exit;
         }
 
