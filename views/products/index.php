@@ -54,7 +54,7 @@ $this->layout('layouts/layout');
                             <?php endif ?>
                         </td>
                         <td class="text-center">
-                            <a href="/products/delete-product?id=<?= $prodotto['id'] ?>"><i class="typcn typcn-trash"></i></a>
+                            <a class="delete-button" href="/products/delete-product?id=<?= $prodotto['id'] ?>"><i class="typcn typcn-trash"></i></a>
                         </td>
                     </tr>
                 <?php endforeach ?>
@@ -160,6 +160,13 @@ $this->layout('layouts/layout');
 
     });
 
+    jQuery(".delete-button").click(function(e) {
+       e.preventDefault();
+       let actionUrl = jQuery(this).attr('href');
+       jQuery("#confirmation-modal").on("show.bs.modal", function (e) {
+           jQuery("#confirmation-modal .confirmation-button").click(function() { window.location.href = actionUrl; });
+       }).modal('show');
+    });
 
     });
 
