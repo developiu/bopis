@@ -52,7 +52,7 @@ $this->layout('layouts/layout');
                         <td><?= $ordine['amount']?></td>
                         <td><?= $ordine['status']?></td>
                         <td class="text-center">
-                            <a href="/orders/delete-order?id=<?=$ordine['id']?>" target="_blank"><i class="typcn typcn-trash"></i></a>
+                            <a class="delete-button"  href="/orders/delete-order?id=<?=$ordine['id']?>"><i class="typcn typcn-trash"></i></a>
                         </td>
                     </tr>
                 <?php endforeach ?>
@@ -113,6 +113,14 @@ $this->layout('layouts/layout');
                     }
                 }
             });
+        });
+
+        jQuery(".delete-button").click(function(e) {
+            e.preventDefault();
+            let actionUrl = jQuery(this).attr('href');
+            jQuery("#confirmation-modal").on("show.bs.modal", function (e) {
+                jQuery("#confirmation-modal .confirmation-button").click(function() { window.location.href = actionUrl; });
+            }).modal('show');
         });
     });
 
