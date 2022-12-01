@@ -46,12 +46,22 @@ class StoreMapper
      */
     public function save($store)
     {
-        $statement = $this->pdo->prepare('UPDATE stores set name=:name, address=:address WHERE id=:id');
+        $statement = $this->pdo->prepare(
+            'UPDATE stores set alias=:alias, addressline1=:addressline1, 
+                    addressline2=:addressline2, addressline3=:addressline3, city=:city,
+                    county=:county, district=:district, state_or_region=:state_or_region, 
+                    postal_code=:postal_code, country_code=:country_code, supply_source_code=:supply_source_code WHERE id=:id');
         if($statement === false) {
             throw new RuntimeException("errore di database");
         }
 
-        $statement->execute([':name' => $store['name'], ':address' => $store['address'], ':id' => STORE_ID]);
+        $statement->execute([
+            ':alias' => $store['alias'] ?? '', ':addressline1' => $store['addressline1'] ?? '',
+            ':addressline2' => $store['addressline2'] ?? '',':addressline3' => $store['addressline3'] ?? '',
+            ':city' => $store['city'] ?? '', ':county' => $store['county'] ?? '', ':district' => $store['district'] ?? '',
+            ':state_or_region' => $store['state_or_region'] ?? '', ':postal_code' => $store['postal_code'] ?? '',
+            ':country_code' => $store['country_code'] ?? '', ':supply_source_code' => $store['supply_source_code'] ?? '',
+            ':id' => STORE_ID]);
 
         return $statement->rowCount() > 0;
     }

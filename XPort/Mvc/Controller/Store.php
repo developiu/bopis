@@ -13,7 +13,14 @@ class Store extends AbstractController
         $mapper = new StoreMapper();
 
         if($_POST) {
-            $store = ['name' =>$_POST['store_name'], 'address' => $_POST['store_address']];
+            $fields = [
+                'alias', 'addressline1', 'addressline2', 'addressline3', 'city', 'county', 'district',
+                'state_or_region', 'postal_code', 'country_code', 'supply_source_code'
+            ];
+            $store = [];
+            foreach($fields as $field) {
+                $store[$field] = $_POST[$field] ?? '';
+            }
             $mapper->save($store);
             header("location: /store");
             exit;
