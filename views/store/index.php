@@ -78,7 +78,100 @@ $this->layout('layouts/layout');
                                class="form-control" id="country-code">
                     </div>
                 </div>
-            </div>
+                <div class="row">
+                    <div class="col-6">
+                        <label for="email">Email</label>
+                        <input type="email"  name="email"  value="<?= $this->e($store['email']) ?>"
+                               class="form-control" id="email">
+                    </div>
+                    <div class="col-6">
+                        <label for="phone">Telefono</label>
+                        <input type="text"  name="phone"  value="<?= $this->e($store['phone']) ?>"
+                               class="form-control" id="phone" pattern="[0-9-]+"
+                               title="il valore inserito non è un numero di telefono valido">
+                    </div>
+                </div>
+                <fieldset>
+                    <legend>Orari</legend>
+                    <div class="row">
+                        <div class="col-3">
+                            <label for="monday_start">Lunedì da</label>
+                            <input type="time"  name="monday_start"  value="<?= $this->e($store['monday_start']) ?>"
+                                   class="form-control" id="monday_start">
+                        </div>
+                        <div class="col-3">
+                            <label for="monday_end">Lunedì a</label>
+                            <input type="time"  name="monday_end"  value="<?= $this->e($store['monday_end']) ?>"
+                                   class="form-control" id="monday_end">
+                        </div>
+                        <div class="col-3">
+                            <label for="tuesday_start">Martedì da</label>
+                            <input type="time"  name="tuesday_start"  value="<?= $this->e($store['tuesday_start']) ?>"
+                                   class="form-control" id="monday_start">
+                        </div>
+                        <div class="col-3">
+                            <label for="tuesday_end">Martedì a</label>
+                            <input type="time"  name="tuesday_end"  value="<?= $this->e($store['tuesday_end']) ?>"
+                                   class="form-control" id="tuesday_end">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-3">
+                            <label for="wednesday_start">Mercoledì da</label>
+                            <input type="time"  name="wednesday_start"  value="<?= $this->e($store['wednesday_start']) ?>"
+                                   class="form-control" id="wednesday_start">
+                        </div>
+                        <div class="col-3">
+                            <label for="wednesday_end">Mercoledì a</label>
+                            <input type="time"  name="wednesday_end"  value="<?= $this->e($store['wednesday_end']) ?>"
+                                   class="form-control" id="wednesday_end">
+                        </div>
+                        <div class="col-3">
+                            <label for="thursday_start">Giovedì da</label>
+                            <input type="time"  name="thursday_start"  value="<?= $this->e($store['thursday_start']) ?>"
+                                   class="form-control" id=thursday_start">
+                        </div>
+                        <div class="col-3">
+                            <label for="thursday_end">Giovedì a</label>
+                            <input type="time"  name="thursday_end"  value="<?= $this->e($store['thursday_end']) ?>"
+                                   class="form-control" id="thursday_end">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-3">
+                            <label for="friday_start">Venerdì da</label>
+                            <input type="time"  name="friday_start"  value="<?= $this->e($store['friday_start']) ?>"
+                                   class="form-control" id="friday_start">
+                        </div>
+                        <div class="col-3">
+                            <label for="friday_end">Venerdì a</label>
+                            <input type="time"  name="friday_end"  value="<?= $this->e($store['friday_end']) ?>"
+                                   class="form-control" id="friday_end">
+                        </div>
+                        <div class="col-3">
+                            <label for="saturday_start">Sabato da</label>
+                            <input type="time"  name="saturday_start"  value="<?= $this->e($store['saturday_start']) ?>"
+                                   class="form-control" id=saturday_start">
+                        </div>
+                        <div class="col-3">
+                            <label for="saturday_end">Sabato a</label>
+                            <input type="time"  name="saturday_end"  value="<?= $this->e($store['saturday_end']) ?>"
+                                   class="form-control" id="saturday_end">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-3">
+                            <label for="sunday_start">Domenica da</label>
+                            <input type="time"  name="sunday_start"  value="<?= $this->e($store['sunday_start']) ?>"
+                                   class="form-control" id="sunday_start">
+                        </div>
+                        <div class="col-3">
+                            <label for="sunday_end">Domenica a</label>
+                            <input type="time"  name="sunday_end"  value="<?= $this->e($store['sunday_end']) ?>"
+                                   class="form-control" id="sunday_end">
+                        </div>
+                    </div>
+                </fieldset>
             <button type="submit" class="btn btn-primary mr-2">Salva</button>
         </form>
     </div>
