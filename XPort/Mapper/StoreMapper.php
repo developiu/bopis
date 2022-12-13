@@ -32,22 +32,8 @@ class StoreMapper
 
         $statement->execute([':store' => STORE_ID]);
 
-        $store = $statement->fetch(PDO::FETCH_ASSOC);
-        $timeFields = [
-            'monday_start','monday_end','tuesday_start','tuesday_end','wednesday_start','wednesday_end','thursday_start',
-            'thursday_end', 'friday_start','friday_end','saturday_start','saturday_end','sunday_start','sunday_end'
-        ];
-        foreach($timeFields as $field) {
-            try {
-                $timeObj = new \DateTime($store[$field]);
-                $store[$field] = $timeObj->format('H:i');
-            }
-            catch(\Exception $e) {
-                $store[$field] = '00:00';
-            }
-        }
-
-        return $store;
+        $row = $statement->fetch(PDO::FETCH_ASSOC);
+        return $this->buildStore($row);
     }
 
     /**
@@ -76,6 +62,8 @@ class StoreMapper
             throw new RuntimeException("errore di database");
         }
 
+        $store = $this->buildStore($store);
+
         $statement->execute([
             ':alias' => $store['alias'] ?? '', ':addressline1' => $store['addressline1'] ?? '',
             ':addressline2' => $store['addressline2'] ?? '',':addressline3' => $store['addressline3'] ?? '',
@@ -98,5 +86,28 @@ class StoreMapper
     public function getAdapter(): PDO
     {
         return $this->pdo;
+    }
+
+    /**
+     * build a store from the data set fetched from the db
+     *
+     * @param array $data
+     * @return array
+     */
+    private function buildStore(array $data)
+    {
+        $timeFields = [
+            'monday_start', 'monday_end', 'tuesday_start', 'tuesday_end', 'wednesday_start', 'wednesday_end', 'thursday_start',
+            'thursday_end', 'friday_start', 'friday_end', 'saturday_start', 'saturday_end', 'sunday_start', 'sunday_end'
+        ];
+        foreach ($timeFields as $field) {
+            try {
+                $timeObj = new \DateTime($data[$field] ?: '00:00');
+                $data[$field] = $timeObj->format('H:i');
+            } catch (\Exception $e) {
+                $data[$field] = '00:00';
+            }
+        }
+        return $data;
     }
 }
