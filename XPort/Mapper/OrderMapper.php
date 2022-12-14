@@ -3,6 +3,7 @@
 namespace XPort\Mapper;
 
 use DomainException;
+use LogicException;
 use PDO;
 use RuntimeException;
 
@@ -43,21 +44,18 @@ class OrderMapper
     }
 
     /**
-     * Elimina l'ordine di dato id
+     *  Annulla l'ordine di dato id: se l'ordine è compatibile con lo stato CANCELLED, mettilo CANCELLED, ALTRIMENTI
+     * mettilo REFOUNDED.
      *
      * @param string $id
-     * @return bool True se l'ordine esisteva ed è stato eliminato, false altrimenti
      * @throws RuntimeException In caso di errore nell'esecuzione della query
      */
-    public function deleteOrder($id)
+    public function cancelOrder($id)
     {
-        $statement = $this->pdo->prepare("DELETE FROM orders WHERE id=?");
-        if($statement === false) {
-            throw new RuntimeException("Errore di database");
+        $updated = $this->updateOrderStatus([ $id ], 'CANCELLED');
+        if(!$updated) {
+            $this->updateOrderStatus([ $id ], 'REFOUNDED');
         }
-        $statement->execute([ $id ]);
-
-        return $statement->rowCount()>0;
     }
 
     /**

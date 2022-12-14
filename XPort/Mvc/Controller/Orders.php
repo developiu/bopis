@@ -15,7 +15,7 @@ class Orders extends AbstractController
         echo $this->getRenderer()->render('orders/index',['ordini' => $orders]);
     }
 
-    public function deleteOrder()
+    public function cancelOrder()
     {
         if(!isset($_GET['id'])) {
             http_response_code(403);
@@ -24,8 +24,14 @@ class Orders extends AbstractController
         }
         $id = $_GET['id'];
         $mapper = new OrderMapper();
-        $mapper->deleteOrder($id);
+        try {
+            $mapper->cancelOrder($id);
+        }
+        catch(\Exception $e) {
+            var_dump($e->getMessage());exit;
+        }
         header("location: /orders");
+        exit;
     }
 
     /**
