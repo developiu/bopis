@@ -1,0 +1,306 @@
+POST http://13.39.112.148/supplysource/
+Content-Type: application/json
+
+{
+  "supplySourceCode": "xxxxx34",
+  "alias": "alias_infostore_cd_123451 pippo",
+  "address": {
+    "name": "John Dae",
+    "addressLine1": "Strada dei 100 Anni",
+    "city": "Seattle",
+    "county": "King",
+    "stateOrRegion": "PD",
+    "postalCode": "30039",
+    "countryCode": "IT",
+    "phone": "0412682992"
+  }
+}
+
+###
+PUT http://13.39.112.148/supplysource/
+Content-Type: application/json
+
+{
+  "alias": "alias_infostore_cd_123451 pippo",
+  "configuration": {
+    "operationalConfiguration": {
+      "contactDetails": {
+        "primary": {
+          "email": "info@incostore.it",
+          "phone": "0412682992"
+        }
+      },
+      "operatingHoursByDay": {
+        "monday": [
+          {
+            "startTime": "09:00",
+            "endTime": "18:00"
+          }
+        ],
+        "tuesday": [
+          {
+            "startTime": "09:00",
+            "endTime": "18:00"
+          }
+        ],
+        "wednesday": [
+          {
+            "startTime": "09:00",
+            "endTime": "18:00"
+          }
+        ],
+        "thursday": [
+          {
+            "startTime": "09:00",
+            "endTime": "18:00"
+          }
+        ],
+        "friday": [
+          {
+            "startTime": "09:00",
+            "endTime": "18:00"
+          }
+        ],
+        "saturday": [
+          {
+            "startTime": "09:00",
+            "endTime": "12:00"
+          }
+        ],
+        "sunday": [
+          {
+            "startTime": "09:00",
+            "endTime": "18:00"
+          }
+        ]
+      },
+      "throughputConfig": {
+        "throughputCap": {
+          "value": 5,
+          "timeUnit": "Hours"
+        }
+      }
+    },
+    "timezone": "Europe/Rome",
+    "handlingTime": {
+      "value": 1,
+      "timeUnit": "Days"
+    }
+  },
+  "capabilities": {
+    "outbound": {
+      "isSupported": true,
+      "operationalConfiguration": {
+        "contactDetails": {
+          "primary": {
+            "email": "info@incostore.it",
+            "phone": "0412682992"
+          }
+        },
+        "operatingHoursByDay": {
+          "monday": [
+            {
+              "startTime": "09:00",
+              "endTime": "18:00"
+            }
+          ],
+          "tuesday": [
+            {
+              "startTime": "09:00",
+              "endTime": "18:00"
+            }
+          ],
+          "wednesday": [
+            {
+              "startTime": "09:00",
+              "endTime": "18:00"
+            }
+          ],
+          "thursday": [
+            {
+              "startTime": "09:00",
+              "endTime": "18:00"
+            }
+          ],
+          "friday": [
+            {
+              "startTime": "09:00",
+              "endTime": "18:00"
+            }
+          ],
+          "saturday": [
+            {
+              "startTime": "09:00",
+              "endTime": "12:00"
+            }
+          ],
+          "sunday": [
+            {
+              "startTime": "09:00",
+              "endTime": "18:00"
+            }
+          ]
+        },
+        "throughputConfig": {
+          "throughputCap": {
+            "value": 5,
+            "timeUnit": "Hours"
+          }
+        }
+      },
+      "returnLocation": {
+        "addressWithContact": {
+          "address": {
+            "name": "John Dae",
+            "addressLine1": "Strada dei 100 Anni1",
+            "addressLine2": "",
+            "addressLine3": "",
+            "city": "Seattle",
+            "county": "King",
+            "district": "",
+            "stateOrRegion": "PD",
+            "postalCode": "30039",
+            "countryCode": "IT",
+            "phone": "0412682992"
+          },
+          "contactDetails": {
+            "primary": {
+              "email": "info@incostore.it",
+              "phone": "0412682992"
+            }
+          }
+        }
+      },
+      "deliveryChannel": {
+        "isSupported": true,
+        "operationalConfiguration": {
+          "contactDetails": {
+            "primary": {
+              "email": "info@incostore.it",
+              "phone": "0412682992"
+            }
+          },
+          "operatingHoursByDay": {
+            "monday": [
+              {
+                "startTime": "09:00",
+                "endTime": "18:00"
+              }
+            ],
+            "tuesday": [
+              {
+                "startTime": "09:00",
+                "endTime": "18:00"
+              }
+            ],
+            "wednesday": [
+              {
+                "startTime": "09:00",
+                "endTime": "18:00"
+              }
+            ],
+            "thursday": [
+              {
+                "startTime": "09:00",
+                "endTime": "18:00"
+              }
+            ],
+            "friday": [
+              {
+                "startTime": "09:00",
+                "endTime": "18:00"
+              }
+            ],
+            "saturday": [
+              {
+                "startTime": "09:00",
+                "endTime": "12:00"
+              }
+            ],
+            "sunday": [
+              {
+                "startTime": "09:00",
+                "endTime": "18:00"
+              }
+            ]
+          },
+          "throughputConfig": {
+            "throughputCap": {
+              "value": 5,
+              "timeUnit": "Hours"
+            }
+          }
+        }
+      },
+      "pickupChannel": {
+        "isSupported": true,
+        "inventoryHoldPeriod": {
+          "value": 1,
+          "timeUnit": "Days"
+        },
+        "operationalConfiguration": {
+          "contactDetails": {
+            "primary": {
+              "email": "info@incostore.it",
+              "phone": "0412682992"
+            }
+          },
+          "operatingHoursByDay": {
+            "monday": [
+              {
+                "startTime": "09:00",
+                "endTime": "18:00"
+              }
+            ],
+            "tuesday": [
+              {
+                "startTime": "09:00",
+                "endTime": "18:00"
+              }
+            ],
+            "wednesday": [
+              {
+                "startTime": "09:00",
+                "endTime": "18:00"
+              }
+            ],
+            "thursday": [
+              {
+                "startTime": "09:00",
+                "endTime": "18:00"
+              }
+            ],
+            "friday": [
+              {
+                "startTime": "09:00",
+                "endTime": "18:00"
+              }
+            ],
+            "saturday": [
+              {
+                "startTime": "09:00",
+                "endTime": "12:00"
+              }
+            ],
+            "sunday": [
+              {
+                "startTime": "09:00",
+                "endTime": "18:00"
+              }
+            ]
+          },
+          "throughputConfig": {
+            "throughputCap": {
+              "value": 5,
+              "timeUnit": "Hours"
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+###
+GET http://13.39.112.148/supplysource/90cb155d-b6c6-4a25-8727-58b840727963
+Content-Type: application/json
