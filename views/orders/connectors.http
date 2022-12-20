@@ -301,6 +301,10 @@ Content-Type: application/json
   }
 }
 
-###
+### successful GET
 GET http://13.39.112.148/supplysource/90cb155d-b6c6-4a25-8727-58b840727963
+Content-Type: application/json
+
+### sunuccessful GET
+GET http://13.39.112.148/supplysource/fake-id
 Content-Type: application/json
