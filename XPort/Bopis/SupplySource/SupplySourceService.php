@@ -50,6 +50,16 @@ class SupplySourceService
     }
 
     /**
+     * Ritorna true se esiste almeno uno store registrato, false altrimenti
+     *
+     * @return bool
+     */
+    public function isSomeStoreRegistered(): bool
+    {
+        return !empty($this->getAll());
+    }
+    
+    /**
      * Ritorna lo store di dato alias, o null se non esiste
      *
      * @param string $alias

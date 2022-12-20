@@ -6,8 +6,8 @@ use DomainException;
 
 class Address
 {
-    /** @var string  */
-    private string $name;
+    /** @var string|null  */
+    private ?string $name;
 
     /** @var string  */
     private string $addressLine1;
@@ -42,7 +42,7 @@ class Address
      */
     public function __construct(array $addressData)
     {
-        $requiredFields = ['name', 'addressLine1', 'city', 'stateOrRegion', 'postalCode', 'countryCode'];
+        $requiredFields = ['addressLine1', 'city', 'stateOrRegion', 'postalCode', 'countryCode'];
         foreach($requiredFields as $fieldName) {
             if(!isset($addressData[$fieldName])) {
                 throw new DomainException("Il campo '$fieldName' è obbligatorio");
@@ -62,7 +62,7 @@ class Address
         $addressLine = $this->addressLine1.($this->addressLine2 ? ' ' . $this->addressLine2 : '').($this->addressLine3 ? ' ' . $this->addressLine3 : '');
         $cityDetails = $this->postalCode . ' ' . $this->city.($this->district||$this->county ? " (" . implode(', ', [$this->district, $this->county ]) . ")" : '');
 
-        return $this->name . ', ' .  $addressLine . ' --- ' . $cityDetails  . ', ' . $this->stateOrRegion . "(" . $this->countryCode . ")";
+        return ($this->name ? $this->name . ', ' : '') .  $addressLine . ' --- ' . $cityDetails  . ', ' . $this->stateOrRegion . "(" . $this->countryCode . ")";
     }
 
     /**
