@@ -1,0 +1,6 @@
+input[required] {
+    background-image: url('/images/star.png');
+    background-repeat: no-repeat;
+    background-position-x: right;
+    background-position-y: center;
+}
