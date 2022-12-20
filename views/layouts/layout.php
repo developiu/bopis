@@ -24,6 +24,8 @@
     <!-- datatable styles -->
     <link rel="stylesheet" href="/node_modules/datatables.net-bs4/css/dataTables.bootstrap4.min.css">
     <!-- end datatable styles -->
+    <!-- custom styles -->
+    <link rel="stylesheet" href="/css/styles.css">
   </head>
   <body>
     <div class="container-scroller">

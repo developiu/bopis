@@ -2,14 +2,72 @@
 
 namespace XPort\Mvc\Controller;
 
+use GuzzleHttp\Client;
+
+use GuzzleHttp\ClientInterface;
+use XPort\Bopis\SupplySource\SupplySourceModel;
+use XPort\Bopis\SupplySource\SupplySourceService;
 use XPort\Mapper\OrderMapper;
 use XPort\Mapper\StoreMapper;
 use XPort\Mvc\AbstractController;
 
 class Store extends AbstractController
 {
+
     public function index()
     {
+        $client = new Client();
+        $service = new SupplySourceService($client);
+
+        if($service->isSomeStoreRegistered()) {
+            header("Location: /store/save");
+        }
+        else {
+            header("Location: /store/create");
+        }
+        exit;
+    }
+
+    public function create()
+    {
+        if($_POST) {
+            $fields = [
+                'alias', 'supplySourceCode','email'
+            ];
+            $addressFields = [
+                'addressLine1', 'addressLine2', 'addressLine3', 'city', 'county', 'district',
+                'stateOrRegion', 'postalCode', 'countryCode', 'email','phone'
+            ];
+            $storeData = [];
+            foreach($fields as $field) {
+                $storeData[$field] = $_POST[$field] ?? '';
+            }
+            foreach($addressFields as $field) {
+                $storeData['address'][$field] = $_POST[$field] ?? '';
+            }
+            // HACK
+            $storeData['supplySourceCode']=$storeData['alias'];
+            // END OF HACK
+            $store = new SupplySourceModel($storeData);
+
+
+            $client = new Client();
+            $service = new SupplySourceService($client);
+
+            $response = $service->create($store);
+            var_dump($response);exit;
+
+            header("location: /store");
+            exit;
+        }
+
+        echo $this->getRenderer()->render('store/create');
+    }
+    
+    public function save()
+    {
+        echo "UPDATE";exit;
+
         $mapper = new StoreMapper();
 
         if($_POST) {

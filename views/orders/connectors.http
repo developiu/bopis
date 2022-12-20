@@ -308,3 +308,6 @@ Content-Type: application/json
 ### sunuccessful GET
 GET http://13.39.112.148/supplysource/fake-id
 Content-Type: application/json
+
+### delete
+DELETE http://13.39.112.148/supplysource/17ba3304-a3b9-46d0-94f6-6fa413d13f04
