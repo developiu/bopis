@@ -95,11 +95,23 @@ class SupplySourceService
     /**
      * Cre lo store a partire dai campi specificati e ritorna lo storeId corrispondente, o null in caso di errore
      *
-     * @param SupplySourceModel $storeData
-     * @return string|null
+     * @param SupplySourceModel $store
+     * @return bool True in caso di successo, false in caso di errore
      */
-    public function create(SupplySourceModel $storeData) :?string
+    public function create(SupplySourceModel $store) :bool
     {
+        $url = BopisCommonService::buildUrl(self::API_BASE_URL . '/');
 
+        $data = $store->toArray();
+
+        $response = BopisCommonService::request($this->client, 'POST', $url, $data);
+
+        var_dump($response);
+
+        if($response == null) {
+            return false;
+        }
+
+        return true;
     }
 }

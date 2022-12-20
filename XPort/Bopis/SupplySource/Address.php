@@ -7,6 +7,9 @@ use DomainException;
 class Address
 {
     /** @var string  */
+    private string $name;
+
+    /** @var string  */
     private string $addressLine1;
 
     /** @var string|null */
@@ -39,7 +42,7 @@ class Address
      */
     public function __construct(array $addressData)
     {
-        $requiredFields = ['addressLine1', 'city', 'stateOrRegion', 'postalCode', 'countryCode'];
+        $requiredFields = ['name', 'addressLine1', 'city', 'stateOrRegion', 'postalCode', 'countryCode'];
         foreach($requiredFields as $fieldName) {
             if(!isset($addressData[$fieldName])) {
                 throw new DomainException("Il campo '$fieldName' è obbligatorio");
@@ -47,7 +50,7 @@ class Address
         }
 
         $fields = [
-            'addressLine1', 'addressLine2', 'addressLine3', 'city', 'county', 'district', 'stateOrRegion',
+            'name', 'addressLine1', 'addressLine2', 'addressLine3', 'city', 'county', 'district', 'stateOrRegion',
             'postalCode', 'countryCode' ];
         foreach($fields as $fieldName) {
             $this->$fieldName = (isset($addressData[$fieldName]) && $addressData[$fieldName]) ? $addressData[$fieldName] : null;
@@ -59,7 +62,25 @@ class Address
         $addressLine = $this->addressLine1.($this->addressLine2 ? ' ' . $this->addressLine2 : '').($this->addressLine3 ? ' ' . $this->addressLine3 : '');
         $cityDetails = $this->postalCode . ' ' . $this->city.($this->district||$this->county ? " (" . implode(', ', [$this->district, $this->county ]) . ")" : '');
 
-        return $addressLine . ' --- ' . $cityDetails  . ', ' . $this->stateOrRegion . "(" . $this->countryCode . ")";
+        return $this->name . ', ' .  $addressLine . ' --- ' . $cityDetails  . ', ' . $this->stateOrRegion . "(" . $this->countryCode . ")";
     }
-    
+
+    /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        $fields = [
+            'name', 'addressLine1', 'addressLine2', 'addressLine3', 'city', 'county', 'district', 'stateOrRegion',
+            'postalCode', 'countryCode' ];
+        $data = [];
+        foreach($fields as $field) {
+            if($this->$field) {
+                $data[$field]=$this->$field;
+            }
+        }
+
+        return $data;
+    }
+
 }

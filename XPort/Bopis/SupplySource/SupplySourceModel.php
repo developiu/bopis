@@ -4,8 +4,8 @@ namespace XPort\Bopis\SupplySource;
 
 class SupplySourceModel
 {
-    /** @var string */
-    private string $supplySourceId;
+    /** @var string|null */
+    private ?string $supplySourceId;
 
     /** @var string  */
     private string $supplySourceCode;
@@ -23,15 +23,15 @@ class SupplySourceModel
      */
     public function __construct(array $storeData)
     {
-        if(!isset($storeData['supplySourceId']) || !isset($storeData['supplySourceCode']) ||
-            !isset($storeData['alias']) || !isset($storeData['details'])) {
+        if(!isset($storeData['supplySourceCode']) ||  !isset($storeData['alias']) || (!isset($storeData['details'])  && !isset($storeData['address']))  ) {
             throw new \DomainException("Il formato di '" . json_encode($storeData) . "' è errato");
         }
 
-        $this->supplySourceId = $storeData['supplySourceId'];
+        $this->supplySourceId = $storeData['supplySourceId'] ?? null;
         $this->supplySourceCode = $storeData['supplySourceCode'];
         $this->alias = $storeData['alias'];
-        $this->address = new Address($storeData['details']);
+        $addressData = $storeData['details'] ?? $storeData['address'];
+        $this->address = new Address($addressData);
     }
 
     /**
@@ -98,6 +98,22 @@ class SupplySourceModel
         $this->address = $address;
     }
 
+    /**
+     * @return array
+     */
+    public function toArray() :array
+    {
+        $fields = [ 'supplySourceId', 'supplySourceCode', 'alias'];
+        $data = [];
+        foreach($fields as $field) {
+            if($this->$field) {
+                $data[$field]=$this->$field;
+            }
+        }
+        $data['address'] = $this->getAddress()->toArray();
+
+        return $data;
+    }
 
 
 }

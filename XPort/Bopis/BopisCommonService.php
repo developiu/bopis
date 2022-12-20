@@ -23,12 +23,16 @@ class BopisCommonService
      */
     public static function request(ClientInterface $client, string $method, string $url, array $inputData = null) :?array
     {
+        $options = [
+            'headers' => [
+                'Accept'     => 'application/json'
+            ]
+        ];
+        if($inputData) {
+            $options['json'] = $inputData;
+        }
         try {
-            $response = $client->request('GET',$url,[
-                'headers' => [
-                    'Accept'     => 'application/json'
-                ]
-            ]);
+            $response = $client->request($method,$url, $options);
         }
         catch(GuzzleException $e) {
             return null;
