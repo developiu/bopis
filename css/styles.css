@@ -4,3 +4,7 @@ input[required] {
     background-position-x: right;
     background-position-y: center;
 }
+
+.xport-select {
+    padding: 0.9rem .75rem !important;
+}

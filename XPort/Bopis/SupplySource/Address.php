@@ -15,20 +15,8 @@ class Address
     /** @var string|null */
     private ?string $addressLine2;
 
-    /** @var string|null */
-    private ?string $addressLine3;
-
     /** @var string  */
     private string $city;
-
-    /** @var string|null */
-    private ?string $county;
-
-    /** @var string|null  */
-    private ?string $district;
-
-    /** @var string */
-    private string $stateOrRegion;
 
     /** @var string  */
     private string $postalCode;
@@ -42,7 +30,7 @@ class Address
      */
     public function __construct(array $addressData)
     {
-        $requiredFields = ['addressLine1', 'city', 'stateOrRegion', 'postalCode', 'countryCode'];
+        $requiredFields = ['addressLine1', 'city'];
         foreach($requiredFields as $fieldName) {
             if(!isset($addressData[$fieldName])) {
                 throw new DomainException("Il campo '$fieldName' è obbligatorio");
@@ -50,10 +38,9 @@ class Address
         }
 
         $fields = [
-            'name', 'addressLine1', 'addressLine2', 'addressLine3', 'city', 'county', 'district', 'stateOrRegion',
-            'postalCode', 'countryCode' ];
+            'name', 'addressLine1', 'addressLine2', 'city', 'postalCode', 'countryCode' ];
         foreach($fields as $fieldName) {
-            $this->$fieldName = (isset($addressData[$fieldName]) && $addressData[$fieldName]) ? $addressData[$fieldName] : null;
+            $this->$fieldName = isset($addressData[$fieldName]) ? $addressData[$fieldName] : "";
         }
     }
 

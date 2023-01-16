@@ -38,6 +38,8 @@ class SupplySourceService
         $answer = [];
         try {
             foreach ($response['supplySources'] as $storeData) {
+                $storeData['address'] = $storeData['details'];
+                unset($storeData['details']);
                 $answer[] = new SupplySourceModel($storeData);
             }
         }
@@ -106,22 +108,146 @@ class SupplySourceService
      * Cre lo store a partire dai campi specificati e ritorna lo storeId corrispondente, o null in caso di errore
      *
      * @param SupplySourceModel $store
-     * @return bool True in caso di successo, false in caso di errore
+     * @return bool True in caso di successo, false in caso di errore.
      */
     public function create(SupplySourceModel $store) :bool
     {
         $url = BopisCommonService::buildUrl(self::API_BASE_URL . '/');
 
-        $data = $store->toArray();
+        $data = self::getCreateData($store);
 
         $response = BopisCommonService::request($this->client, 'POST', $url, $data);
-
-        var_dump($response);
 
         if($response == null) {
             return false;
         }
 
         return true;
+    }
+
+    public function update(SupplySourceModel $store) :bool
+    {
+        $url = BopisCommonService::buildUrl(self::API_BASE_URL . '/');
+
+        $data = self::getUpdateData($store);
+
+        $response = BopisCommonService::request($this->client, 'PUT', $url, $data);
+
+        if($response == null) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private static function getCreateData(SupplySourceModel $store): array
+    {
+        return [
+            "supplySourceCode" => $store->getSupplySourceCode(),
+            "alias" => $store->getAlias(),
+            "address" => $store->getAddress()->toArray()
+        ];
+    }
+
+    public static function getUpdateData(SupplySourceModel $store): array
+    {
+        $data = [
+            "alias" =>  $store->getAlias(),
+            "configuration" =>  [
+                "operationalConfiguration" =>  [
+                    "contactDetails" =>  [
+                        "primary" =>  [
+                            "email" =>  $store->getEmail(),
+                            "phone" =>  $store->getPhone()
+                        ]
+                    ],
+                    "operatingHoursByDay" =>  $store->getOperatingHours()->toArray(),
+                    "throughputConfig" =>  [
+                        "throughputCap" =>  [
+                            "value" =>  5,
+                            "timeUnit" =>  "Hours"
+                        ]
+                    ]
+                ],
+                "timezone" =>  $store->getTimezone(),
+                "handlingTime" =>  [
+                    "value" =>  $store->getHandlingTime(),
+                    "timeUnit" =>  "Hours"
+                ]
+            ],
+            "capabilities" =>  [
+                "outbound" =>  [
+                    "isSupported" =>  true,
+                    "operationalConfiguration" =>  [
+                        "contactDetails" =>  [
+                            "primary" =>  [
+                                "email" =>  $store->getEmail(),
+                                "phone" =>  $store->getPhone()
+                            ]
+                        ],
+                        "operatingHoursByDay" =>  $store->getOperatingHours()->toArray(),
+                        "throughputConfig" =>  [
+                            "throughputCap" =>  [
+                                "value" =>  5,
+                                "timeUnit" =>  "Hours"
+                            ]
+                        ]
+                    ],
+                    "returnLocation" =>  [
+                        "addressWithContact" =>  [
+                            "address" =>  $store->getAddress()->toArray(),
+                            "contactDetails" =>  [
+                                "primary" =>  [
+                                    "email" =>  $store->getEmail(),
+                                    "phone" =>  $store->getPhone()
+                                ]
+                            ]
+                        ]
+                    ],
+                    "deliveryChannel" =>  [
+                        "isSupported" =>  true,
+                        "operationalConfiguration" =>  [
+                            "contactDetails" =>  [
+                                "primary" =>  [
+                                    "email" =>  $store->getEmail(),
+                                    "phone" =>  $store->getPhone()
+                                ]
+                            ],
+                            "operatingHoursByDay" =>  $store->getOperatingHours()->toArray(),
+                            "throughputConfig" =>  [
+                                "throughputCap" =>  [
+                                    "value" =>  5,
+                                    "timeUnit" =>  "Hours"
+                                ]
+                            ]
+                        ]
+                    ],
+                    "pickupChannel" =>  [
+                        "isSupported" =>  true,
+                        "inventoryHoldPeriod" =>  [
+                            "value" =>  $store->getInventoryHoldPeriod(),
+                            "timeUnit" =>  "Days"
+                        ],
+                        "operationalConfiguration" =>  [
+                            "contactDetails" =>  [
+                                "primary" =>  [
+                                    "email" =>  $store->getEmail(),
+                                    "phone" =>  $store->getPhone()
+                                ]
+                            ],
+                            "operatingHoursByDay" =>  $store->getOperatingHours()->toArray(),
+                            "throughputConfig" =>  [
+                                "throughputCap" =>  [
+                                    "value" =>  5,
+                                    "timeUnit" => "Hours"
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ];
+
+        return $data;
     }
 }
