@@ -24,7 +24,7 @@ class SupplySourceService
     /**
      * Ritorna gli store registrati o null in caso di errore
      *
-     * @return array|null
+     * @return array[SupplySourceModel]|null
      */
     public function getAll() :?array
     {
@@ -118,16 +118,27 @@ class SupplySourceService
 
         $response = BopisCommonService::request($this->client, 'POST', $url, $data);
 
-        if($response == null) {
+        if($response === null) {
             return false;
         }
 
         return true;
     }
 
+    /**
+     * Aggiorna lo store con i nuovi dati. Lo store da modificare viene trovato usando l'id di $store
+     *
+     * @param SupplySourceModel $store
+     * @return bool
+     * @throws DomainException se $store non ha la supplySourceId definita
+     */
     public function update(SupplySourceModel $store) :bool
     {
-        $url = BopisCommonService::buildUrl(self::API_BASE_URL . '/');
+        if($store->getSupplySourceId()===null) {
+            throw new DomainException("Non è possibile aggiornare uno store se non ha la supplySourceId definita");
+        }
+
+        $url = BopisCommonService::buildUrl(self::API_BASE_URL . '/' . $store->getSupplySourceId());
 
         $data = self::getUpdateData($store);
 
@@ -137,7 +148,7 @@ class SupplySourceService
             return false;
         }
 
-        return true;
+        return $response;
     }
 
     private static function getCreateData(SupplySourceModel $store): array

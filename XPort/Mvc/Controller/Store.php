@@ -19,6 +19,7 @@ class Store extends AbstractController
 
         $registeredStores = $service->getAll();
         $store = array_shift($registeredStores);
+
         if(!$store) {
             $store = new SupplySourceModel(['supplySourceCode' => '', 'alias' => '', 'address' => ['addressLine1' => '', 'city' => '' ]]);
         }
@@ -30,19 +31,24 @@ class Store extends AbstractController
     {
        if($_POST) {
             $data = $_POST;
-            $data['supplySourceCode'] = uniqid();
+            if(!$data['supplySourceCode']) {
+                $data['supplySourceCode'] = uniqid();
+            }
             $store = new SupplySourceModel($data);
 
             $client = new Client();
             $service = new SupplySourceService($client);
 
             $successful = true;
-            if(!$service->isSomeStoreRegistered()) {
+            if(!$service->isSomeStoreRegistered()) { // new store creation
                 $successful = $service->create($store);
             }
 
             if($successful) {
-                //$successful = $service->update($store);
+                $allStores = $service->getAll();
+                $currentStoreOnApi = array_shift($allStores);
+                $store->setSupplySourceId($currentStoreOnApi->getSupplySourceId());
+                $successful = $service->update($store);
             }
        }
        header("Location: /store");

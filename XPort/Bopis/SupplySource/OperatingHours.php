@@ -43,8 +43,7 @@ class OperatingHours
             throw new DomainException("'$end' non è un formato orario valido");
         }
 
-        $this->hoursTable[$day]['startTime'] = $start;
-        $this->hoursTable[$day]['endTime'] = $end;
+        $this->hoursTable[$day][0]=['startTime' => $start, 'endTime' => $end];
     }
 
     /**

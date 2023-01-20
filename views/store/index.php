@@ -16,6 +16,8 @@ $address = $store->getAddress()->toArray();
             Dati di registrazione
         </p>
         <form method="post" action="/store/save">
+            <input type="hidden" name="supplySourceId" value="<?= $store->getSupplySourceId() ?? '' ?>">
+            <input type="hidden" name="supplySourceCode" value="<?= $store->getSupplySourceCode() ?? '' ?>">
             <div class="form-group">
                 <div class="row">
                     <div class="col-12">
