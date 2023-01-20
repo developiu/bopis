@@ -39,6 +39,11 @@ class BopisCommonService
         }
 
         $body = $response->getBody()->getContents();
+        $response->getBody()->close();
+
+        if($body==="") {
+            return [];
+        }
 
         $answer = json_decode($body, true);
 
