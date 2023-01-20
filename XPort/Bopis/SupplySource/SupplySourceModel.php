@@ -38,7 +38,7 @@ class SupplySourceModel
      * @param array $storeData Un array del tipo
      * [
      *   supplySourceId => ..., supplySourceCode => .., alias =>..., address => [ .... ], ...
-     *   operatinHours => ...
+     *   operatingHours => ...
      * ]
      * ove il formato dell'array corrispondente ad details è quello necessario per costruire un Address
      * @throws DomainException Se il formato dell'array non è corretto
@@ -48,7 +48,6 @@ class SupplySourceModel
         if(!isset($storeData['supplySourceCode']) ||  !isset($storeData['alias']) || !isset($storeData['address']) ) {
             throw new \DomainException("Il formato di '" . json_encode($storeData) . "' è errato");
         }
-
         $this->supplySourceId = $storeData['supplySourceId'] ?? null;
         $this->supplySourceCode = $storeData['supplySourceCode'];
         $this->alias = $storeData['alias'];

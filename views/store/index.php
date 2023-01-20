@@ -102,10 +102,10 @@ $address = $store->getAddress()->toArray();
                             <?= $dayLabel ?>
                         </div>
                         <div class="col-3">
-                            <input type="time"  name="operatingHours[<?=$dayCode ?>][startTime]"  value="" class="form-control" />
+                            <input type="time"  name="operatingHours[<?=$dayCode ?>][startTime]"  value="<?= $store->getOperatingHours()->getStartTime($dayCode)?>" class="form-control" />
                         </div>
                         <div class="col-3">
-                            <input type="time"  name="operatingHours[<?=$dayCode ?>][endTime]"  value="" class="form-control" />
+                            <input type="time"  name="operatingHours[<?=$dayCode ?>][endTime]"  value="<?= $store->getOperatingHours()->getEndTime($dayCode)?>" class="form-control" />
                         </div>
                         <div class="col-3 d-flex align-items-center">
                             <div class="custom-control custom-switch">

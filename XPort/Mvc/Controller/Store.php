@@ -18,7 +18,8 @@ class Store extends AbstractController
         $service = new SupplySourceService($client);
 
         $registeredStores = $service->getAll();
-        $store = array_shift($registeredStores);
+        $firstStore = array_shift($registeredStores);
+        $store = $service->get($firstStore->getSupplySourceId());
 
         if(!$store) {
             $store = new SupplySourceModel(['supplySourceCode' => '', 'alias' => '', 'address' => ['addressLine1' => '', 'city' => '' ]]);
@@ -48,6 +49,7 @@ class Store extends AbstractController
                 $allStores = $service->getAll();
                 $currentStoreOnApi = array_shift($allStores);
                 $store->setSupplySourceId($currentStoreOnApi->getSupplySourceId());
+
                 $successful = $service->update($store);
             }
        }
@@ -88,13 +90,6 @@ class Store extends AbstractController
         }
 
         echo $this->getRenderer()->render('store/create');
-    }
-
-
-    private function createSupplySourceFromArray(array $data)
-    {
-        $model = new SupplySourceModel();
-
     }
 
 }

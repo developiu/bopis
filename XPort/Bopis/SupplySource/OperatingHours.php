@@ -28,7 +28,7 @@ class OperatingHours
      * @param string $end
      * throws DomainException se il formato di $day, $start o $end non è corretto
      */
-    public function setDay(string $day, string $start, string $end)
+    public function setDay(string $day, string $start, string $end): void
     {
         if(!$this->isValidWeekDay($day)) {
             throw new DomainException("'$day' non è un giorno della settimana valido");
@@ -59,7 +59,10 @@ class OperatingHours
             throw new DomainException("'$day' non è un giorno della settimana valido");
         }
 
-        return $this->hoursTable[$day]['startTime'] ?? null;
+        if(empty($this->hoursTable[$day])) {
+            return null;
+        }
+        return $this->hoursTable[$day][0]['startTime'] ?? null;
     }
 
 
@@ -76,7 +79,11 @@ class OperatingHours
             throw new DomainException("'$day' non è un giorno della settimana valido");
         }
 
-        return $this->hoursTable[$day]['endTime'] ?? null;
+        if(empty($this->hoursTable[$day])) {
+            return null;
+        }
+
+        return $this->hoursTable[$day][0]['endTime'] ?? null;
     }
 
     /**

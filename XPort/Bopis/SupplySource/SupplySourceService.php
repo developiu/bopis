@@ -24,7 +24,7 @@ class SupplySourceService
     /**
      * Ritorna gli store registrati o null in caso di errore
      *
-     * @return array[SupplySourceModel]|null
+     * @return SupplySourceModel[]|null
      */
     public function getAll() :?array
     {
@@ -52,7 +52,7 @@ class SupplySourceService
     }
 
     /**
-     * Ritorna true se esiste almeno uno store registrato, false altrimenti
+     * Ritorna true se esiste almeno uno store registrato, false altrimenti.
      *
      * @return bool
      */
@@ -60,27 +60,10 @@ class SupplySourceService
     {
         return !empty($this->getAll());
     }
-    
-    /**
-     * Ritorna lo store di dato alias, o null se non esiste
-     *
-     * @param string $alias
-     * @return SupplySourceModel|null
-     */
-    public function getByAlias(string $alias):?SupplySourceModel
-    {
-        $stores = $this->getAll();
-        foreach ($stores as $store) {
-            if($store->getAlias() == $alias) {
-                return $store;
-            }
-        }
-
-        return null;
-    }
 
     /**
-     * Ritorna lo store di dato id o null se tale store non esiste.
+     * Ritorna lo store di dato id o null se tale store non esiste. Attenzione,
+     * questa chiamata ritorna tutti i dati, mentre getAll ne ritorna solo alcuni.
      *
      * @param string $storeId
      * @return SupplySourceModel|null
@@ -95,7 +78,7 @@ class SupplySourceService
         }
 
         try {
-            $store = new SupplySourceModel($response);
+            $store = self::createFromGetData($response);
         }
         catch(DomainException $e) {
             return null;
@@ -261,4 +244,33 @@ class SupplySourceService
 
         return $data;
     }
+
+    /**
+     * Crea uno store a partire dai dati ritornati dalla chiamata a GET
+     *
+     * @param $data
+     * @return SupplySourceModel
+     */
+    private function createFromGetData($data): SupplySourceModel
+    {
+        $data['email'] = $data['configuration']['operationalConfiguration']['contactDetails']['primary']['email'];
+        $data['phone'] = $data['configuration']['operationalConfiguration']['contactDetails']['primary']['phone'];
+        $data['timezone'] = $data['configuration']['timezone'];
+        $data['handlingTime'] = $data['capabilities']['outbound']['pickupChannel']['operationalConfiguration']['handlingTime']['value'];
+        $data['inventoryHoldPeriod'] = $data['capabilities']['outbound']['pickupChannel']['inventoryHoldPeriod']['value'];
+        $data['operatingHours'] = [];
+
+        foreach($data['configuration']['operationalConfiguration']['operatingHoursByDay'] as $day=>$timeIntervals) {
+            if(empty($timeIntervals)) {
+                continue;
+            }
+            $data['operatingHours'][$day] = array_shift($timeIntervals);
+        }
+
+        unset($data['configuration']);
+        unset($data['capabilities']);
+
+        return new SupplySourceModel($data);
+    }
+
 }
