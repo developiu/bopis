@@ -310,4 +310,138 @@ GET http://13.39.112.148/supplysource/fake-id
 Content-Type: application/json
 
 ### delete
-DELETE http://13.39.112.148/supplysource/17ba3304-a3b9-46d0-94f6-6fa413d13f04
+DELETE http://13.39.112.148/supplysource/8578b222-843b-4dbe-956e-4c0588ad54c8
+
+### chiamata put problematica
+PUT http://13.39.112.148/supplysource/9b807e20-0a48-481a-86b3-95d6a820244a
+Content-Type: application/json
+
+{
+  "alias": "Lulu Store - 60 Holborn Viaduct EC1A2FDxx",
+  "configuration": {
+    "operationalConfiguration": {
+      "contactDetails": {
+        "primary": {
+          "email": "info@ftapparo.org",
+          "phone": "12344440"
+        }
+      },
+      "operatingHoursByDay": {
+        "monday": [
+          {
+            "startTime": "08:00",
+            "endTime": "09:00"
+          }
+        ]
+      },
+      "throughputConfig": {
+        "throughputCap": {
+          "value": 5,
+          "timeUnit": "Hours"
+        }
+      }
+    },
+    "timezone": "Europe\/Amsterdam",
+    "handlingTime": {
+      "value": 12,
+      "timeUnit": "Hours"
+    }
+  },
+  "capabilities": {
+    "outbound": {
+      "isSupported": true,
+      "operationalConfiguration": {
+        "contactDetails": {
+          "primary": {
+            "email": "francesco@ftapparo.org",
+            "phone": "12344440"
+          }
+        },
+        "operatingHoursByDay": {
+          "monday": [
+            {
+              "startTime": "08:00",
+              "endTime": "09:00"
+            }
+          ]
+        },
+        "throughputConfig": {
+          "throughputCap": {
+            "value": 5,
+            "timeUnit": "Hours"
+          }
+        }
+      },
+      "returnLocation": {
+        "addressWithContact": {
+          "address": {
+            "addressLine1": "via dei test 123",
+            "city": "arzignano",
+            "postalCode": "36100",
+            "countryCode": "IT"
+          },
+          "contactDetails": {
+            "primary": {
+              "email": "francesco@ftapparo.org",
+              "phone": "12344440"
+            }
+          }
+        }
+      },
+      "deliveryChannel": {
+        "isSupported": true,
+        "operationalConfiguration": {
+          "contactDetails": {
+            "primary": {
+              "email": "francesco@ftapparo.org",
+              "phone": "12344440"
+            }
+          },
+          "operatingHoursByDay": {
+            "monday": [
+              {
+                "startTime": "08:00",
+                "endTime": "09:00"
+              }
+            ]
+          },
+          "throughputConfig": {
+            "throughputCap": {
+              "value": 5,
+              "timeUnit": "Hours"
+            }
+          }
+        }
+      },
+      "pickupChannel": {
+        "isSupported": true,
+        "inventoryHoldPeriod": {
+          "value": 33,
+          "timeUnit": "Days"
+        },
+        "operationalConfiguration": {
+          "contactDetails": {
+            "primary": {
+              "email": "francesco@ftapparo.org",
+              "phone": "12344440"
+            }
+          },
+          "operatingHoursByDay": {
+            "monday": [
+              {
+                "startTime": "08:00",
+                "endTime": "09:00"
+              }
+            ]
+          },
+          "throughputConfig": {
+            "throughputCap": {
+              "value": 5,
+              "timeUnit": "Hours"
+            }
+          }
+        }
+      }
+    }
+  }
+}
