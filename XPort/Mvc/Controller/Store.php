@@ -19,11 +19,13 @@ class Store extends AbstractController
 
         $registeredStores = $service->getAll();
         $firstStore = array_shift($registeredStores);
-        $store = $service->get($firstStore->getSupplySourceId());
-
-        if(!$store) {
+        if($firstStore) {
+            $store = $service->get($firstStore->getSupplySourceId());
+        }
+        else {
             $store = new SupplySourceModel(['supplySourceCode' => '', 'alias' => '', 'address' => ['addressLine1' => '', 'city' => '' ]]);
         }
+
 
         echo $this->getRenderer()->render('store/index', ['store' => $store]);
     }

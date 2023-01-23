@@ -7,6 +7,7 @@ $this->layout('layouts/layout');
 /** @var SupplySourceModel $store (importata dal controller) */
 
 $address = $store->getAddress()->toArray();
+$isAddressDefined = boolval(array_filter($address));
 ?>
 
 <div class="card">
@@ -32,29 +33,29 @@ $address = $store->getAddress()->toArray();
                     <div class="col-6">
                       <label for="addressLine1">Indirizzo (prima riga)</label>
                       <input type="text"  name="address[addressLine1]"  value="<?= $address['addressLine1'] ?>" required
-                             class="form-control" id="addressLine1">
+                             class="form-control" id="addressLine1" <?= $isAddressDefined ? "readonly" : ""?>>
                     </div>
                     <div class="col-6">
                         <label for="addressLine2">Indirizzo (seconda riga)</label>
                         <input type="text"  name="address[addressLine2]"  value="<?= $address['addressLine2'] ?>"
-                               class="form-control" id="addressLine2">
+                               class="form-control" id="addressLine2" <?= $isAddressDefined ? "readonly" : ""?>>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-2">
                         <label for="country-code">Nazione (codice ISO)</label>
                         <input type="text"  name="address[countryCode]"  value="<?= $address['countryCode'] ?>" required
-                               class="form-control" id="country-code">
+                               class="form-control" id="country-code" <?= $isAddressDefined ? "readonly" : ""?>>
                     </div>
                     <div class="col-2">
                         <label for="city">Città</label>
                         <input type="text"  name="address[city]"  value="<?= $address['city'] ?>" required
-                               class="form-control" id="city">
+                               class="form-control" id="city" <?= $isAddressDefined ? "readonly" : ""?>>
                     </div>
                     <div class="col-2">
                         <label for="postal-code">Codice Postale</label>
                         <input type="text"  name="address[postalCode]"  value="<?= $address['postalCode'] ?>" required
-                               class="form-control" id="postal-code">
+                               class="form-control" id="postal-code <?= $isAddressDefined ? "readonly" : ""?>">
                     </div>
                     <div class="col-2">
                         <label for="timezone">Fuso orario</label>
