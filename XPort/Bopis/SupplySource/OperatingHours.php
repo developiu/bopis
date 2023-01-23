@@ -16,6 +16,10 @@ class OperatingHours
     {
         $this->hoursTable = [];
         foreach($data as $day=>$start_end) {
+            if(!isset($start_end['startTime']) || !isset($start_end['endTime']) || ($start_end['startTime']=='00:00' && $start_end['endTime']=='00:00')) {
+                continue;
+            }
+
             $this->setDay($day, $start_end['startTime'], $start_end['endTime']);
         }
     }

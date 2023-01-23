@@ -15,7 +15,7 @@ $address = $store->getAddress()->toArray();
         <p class="card-description">
             Dati di registrazione
         </p>
-        <form method="post" action="/store/save">
+        <form id="store-form" method="post" action="/store/save">
             <input type="hidden" name="supplySourceId" value="<?= $store->getSupplySourceId() ?? '' ?>">
             <input type="hidden" name="supplySourceCode" value="<?= $store->getSupplySourceCode() ?? '' ?>">
             <div class="form-group">
@@ -79,13 +79,13 @@ $address = $store->getAddress()->toArray();
                 <div class="row">
                     <div class="col-6">
                         <label for="email">Email</label>
-                        <input type="email"  name="email"  value="<?= $store->getEmail() ?>"
+                        <input type="email"  name="email"  value="<?= $store->getEmail() ?>" required
                                class="form-control" id="email">
                     </div>
                     <div class="col-6">
                         <label for="phone">Telefono</label>
                         <input type="text"  name="phone"  value="<?= $store->getPhone() ?>"
-                               class="form-control" id="phone" pattern="[0-9-]+"
+                               class="form-control" id="phone" pattern="[0-9-]+" required
                                title="il valore inserito non è un numero di telefono valido">
                     </div>
                 </div>
@@ -102,10 +102,10 @@ $address = $store->getAddress()->toArray();
                             <?= $dayLabel ?>
                         </div>
                         <div class="col-3">
-                            <input type="time"  name="operatingHours[<?=$dayCode ?>][startTime]"  value="<?= $store->getOperatingHours()->getStartTime($dayCode)?>" class="form-control" />
+                            <input type="time"  name="operatingHours[<?=$dayCode ?>][startTime]"  value="<?= $store->getOperatingHours()->getStartTime($dayCode)?>" class="form-control day_start" />
                         </div>
                         <div class="col-3">
-                            <input type="time"  name="operatingHours[<?=$dayCode ?>][endTime]"  value="<?= $store->getOperatingHours()->getEndTime($dayCode)?>" class="form-control" />
+                            <input type="time"  name="operatingHours[<?=$dayCode ?>][endTime]"  value="<?= $store->getOperatingHours()->getEndTime($dayCode)?>" class="form-control day_end" />
                         </div>
                         <div class="col-3 d-flex align-items-center">
                             <div class="custom-control custom-switch">
@@ -123,18 +123,63 @@ $address = $store->getAddress()->toArray();
 
 <script type="text/javascript">
     document.addEventListener('DOMContentLoaded',function() {
-        jQuery(".day-switcher").click(function () {
-            if (jQuery(this).is(":checked")) {
-                jQuery(this).closest(".row").find("[type=time]").each(function () {
+        function update_after_day_switch(node) {
+            if (jQuery(node).is(":checked")) {
+                jQuery(node).closest(".row").find("[type=time]").each(function () {
                     jQuery(this).removeAttr('disabled');
                 });
             } else {
-                jQuery(this).closest(".row").find("[type=time]").each(function () {
+                jQuery(node).closest(".row").find("[type=time]").each(function () {
                     jQuery(this).val("");
                     jQuery(this).attr('disabled', 'disabled');
                 });
             }
+        }
+
+        jQuery(".day-switcher").click(function () {
+            update_after_day_switch(jQuery(this));
         });
+
+        jQuery(".day-switcher").each(function() {
+            if(jQuery(this).closest(".row").find(".day_start").val()=="" && jQuery(this).closest(".row").find(".day_end").val()=="") {
+                jQuery(this).prop("checked",false);
+                update_after_day_switch(jQuery(this));
+            }
+        });
+
+
+        function validateSwitcher(node) {
+            let switcherNode = jQuery(node).closest(".row").find('.day-switcher');
+            switcherNode = switcherNode.get(0);
+            switcherNode.setCustomValidity("");
+            if(!jQuery(switcherNode).is(":checked")) {
+                return;
+            }
+
+            if(jQuery(switcherNode).closest(".row").find(".day_start").val()=="" || jQuery(switcherNode).closest(".row").find(".day_end").val()=="") {
+                switcherNode.setCustomValidity("Specificare l'orario di inizio e fine o disabilitare il giorno");
+                return;
+            }
+
+
+            let dateStart = new Date("1970-01-01T" + jQuery(switcherNode).closest(".row").find(".day_start").val());
+            let dateEnd = new Date("1970-01-01T" + jQuery(switcherNode).closest(".row").find(".day_end").val());
+
+            if(dateStart.getTime()>=dateEnd.getTime()) {
+                switcherNode.setCustomValidity("L'orario di fine deve essere successivo a quello di inizio");
+                return;
+            }
+
+        }
+
+        jQuery(".day-switcher").each(function() {
+            this.addEventListener("click", function() { validateSwitcher(this); } );
+        });
+        jQuery(".day_start, .day_end").each(function() {
+            this.addEventListener("change", function() { validateSwitcher(this); });
+        });
+
+
     });
 </script>
 
