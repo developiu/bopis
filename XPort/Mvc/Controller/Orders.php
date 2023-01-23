@@ -2,6 +2,8 @@
 
 namespace XPort\Mvc\Controller;
 
+use GuzzleHttp\Client;
+use XPort\Bopis\Order\OrderService;
 use XPort\Mapper\OrderMapper;
 use XPort\Mvc\AbstractController;
 
@@ -15,24 +17,24 @@ class Orders extends AbstractController
         echo $this->getRenderer()->render('orders/index',['ordini' => $orders]);
     }
 
-    public function cancelOrder()
-    {
-        if(!isset($_GET['id'])) {
-            http_response_code(403);
-            echo $this->getRenderer()->render('error-pages/general_error',['error_code' => 403,'message' => "Accesso vietato"]);
-            exit;
-        }
-        $id = $_GET['id'];
-        $mapper = new OrderMapper();
-        try {
-            $mapper->cancelOrder($id);
-        }
-        catch(\Exception $e) {
-            var_dump($e->getMessage());exit;
-        }
-        header("location: /orders");
-        exit;
-    }
+//    public function cancelOrder()
+//    {
+//        if(!isset($_GET['id'])) {
+//            http_response_code(403);
+//            echo $this->getRenderer()->render('error-pages/general_error',['error_code' => 403,'message' => "Accesso vietato"]);
+//            exit;
+//        }
+//        $id = $_GET['id'];
+//        $mapper = new OrderMapper();
+//        try {
+//            $mapper->cancelOrder($id);
+//        }
+//        catch(\Exception $e) {
+//            var_dump($e->getMessage());exit;
+//        }
+//        header("location: /orders");
+//        exit;
+//    }
 
     /**
      * Accetta due parametri: id e status; id può essere una stringa o un array di stringhe. Se id è una stringa
@@ -75,9 +77,23 @@ class Orders extends AbstractController
             exit;
         }
 
-        $orderMapper->updateOrderStatus($ids, $status);
+        $client = new Client();
+        $orderService = new OrderService($client);
+        $successful = true;
+        foreach($ids as $id) {
+            $successful = $successful && $orderService->updateStatus($id, $status);
+            if($successful) {
+                $orderMapper->updateOrderStatus($id, $status);
+            }
+            else {
+                break;
+            }
+        }
 
-        echo json_encode(['status' => 'success']);
+        echo json_encode([
+            'status' => $successful,
+            'message' => 'non sono riuscito ad aggiornare lo stato di tutti gli ordini per un problema di connessione alla API: riprovare più tardi'
+        ]);
         exit;
     }
 }
