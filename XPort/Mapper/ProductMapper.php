@@ -30,6 +30,19 @@ class ProductMapper
     }
 
     /**
+     * @return array|false
+     */
+    public function productsWithQuantityToSync()
+    {
+        $statement = $this->pdo->query('SELECT * FROM products WHERE synced=0 ORDER BY id desc');
+        if($statement === false) {
+            return false;
+        }
+
+        return $statement->fetchAll();
+    }
+
+    /**
      * @param int $productId
      * @param string $field
      * @param string $newValue
@@ -41,7 +54,7 @@ class ProductMapper
         if($affected === false) {
             return false;
         }
-        if($affected) {
+        if($affected && $field!='synced') {
             $this->pdo->exec('UPDATE products set synced=0 WHERE id=' . $productId);
             return 1;
         }

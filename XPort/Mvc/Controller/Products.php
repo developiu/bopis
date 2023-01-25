@@ -3,6 +3,8 @@
 namespace XPort\Mvc\Controller;
 
 use Exception;
+use GuzzleHttp\Client;
+use XPort\Bopis\Product\ProductService;
 use XPort\Mapper\ProductMapper;
 use XPort\Mvc\AbstractController;
 use XPort\StringUtils;
@@ -17,6 +19,37 @@ class Products extends AbstractController
         echo $this->getRenderer()->render('products/index',['prodotti' => $prodotti]);
     }
 
+    public function exportQuantityToAmazon()
+    {
+        $mapper = new ProductMapper();
+        $prodotti = $mapper->productsWithQuantityToSync();
+
+        if(empty($prodotti)) {
+            echo json_encode(['status' => 'success', 'message' => 'Tutti i prodotti sono già sincronizzati', 'reload' => false]);
+            return;
+        }
+
+        $client = new Client();
+        $service = new ProductService($client);
+
+        $productNumber = count($prodotti);
+        $productSent = 0;
+        foreach ($prodotti as $prodotto) {
+            $successfull = $service->updateQuantity($prodotto['sku'], $prodotto['quantity']);
+            if($successfull) {
+                $mapper->update($prodotto['id'],'synced',1);
+                $productSent++;
+            }
+        }
+
+        if($productSent!=$productNumber) {
+            echo json_encode(['status' => 'error', 'message' => "Errore nella sincronizzazione di alcuni prodotti", 'reload' => false]);
+            return;
+        }
+
+        echo json_encode(['status' => 'success', 'message' => "I prodotti sono stati sincronizzati", 'reload' => true]);
+    }
+    
     public function updateQuantity()
     {
         $productId = $_GET['pid'] ?? null;
@@ -277,6 +310,5 @@ class Products extends AbstractController
 
         return true;
     }
-
-
+    
 }

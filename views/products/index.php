@@ -12,7 +12,7 @@ $this->layout('layouts/layout');
         <h4 class="card-title">Prodotti</h4>
 
         <form class="form-inline flex-row-reverse">
-            <button type="button" class="btn btn-primary update-products-button m-1 disabled" title="non ancora implementato">Aggiorna quantità</button>
+            <button type="button" class="btn btn-primary export-qty-button m-1" data-url="/products/export-quantity-to-amazon">Esporta quantità su Amazon</button>
             <button type="button" class="btn btn-primary update-create-product m-1">Aggiorna/Crea prodotto</button>
             <div class="form-group">
                 <input type="file" name="product-csv-file" class="file-upload-default">
@@ -166,6 +166,28 @@ $this->layout('layouts/layout');
        jQuery("#confirmation-modal").on("show.bs.modal", function (e) {
            jQuery("#confirmation-modal .confirmation-button").click(function() { window.location.href = actionUrl; });
        }).modal('show');
+    });
+
+    jQuery(".export-qty-button").click(function(e) {
+        e.preventDefault();
+        let actionUrl = jQuery(this).attr('data-url');
+        jQuery.ajax({
+            url: actionUrl,
+            method: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                if(data.status=='error') {
+                    jQuery.notify(data.message,{type: 'danger', delay: 1000*60*60, close: true});
+                    return;
+                }
+                if(data.reload==true) {
+                    window.location.reload();
+                }
+                else {
+                    jQuery.notify(data.message,{type: 'success', delay: 1000*60*60, close: true});
+                }
+            }
+        });
     });
 
     });
