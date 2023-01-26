@@ -77,22 +77,31 @@ class Orders extends AbstractController
             exit;
         }
 
-        $client = new Client();
-        $orderService = new OrderService($client);
-        $successful = true;
-        foreach($ids as $id) {
-            $successful = $successful && $orderService->updateStatus($id, $status);
-            if($successful) {
-                $orderMapper->updateOrderStatus($id, $status);
-            }
-            else {
-                break;
-            }
+//        $client = new Client();
+//        $orderService = new OrderService($client);
+//        $successful = true;
+//        foreach($ids as $id) {
+//            $successful = $successful && $orderService->updateStatus($id, $status);
+//            if($successful) {
+//                $orderMapper->updateOrderStatus($id, $status);
+//            }
+//            else {
+//                break;
+//            }
+//        }
+
+        $numberModified = $orderMapper->updateOrderStatus($ids, $status);
+
+        if($numberModified === 0) {
+            echo json_encode([
+                'status' => 'warn',
+                'message' => 'nessun ordine modificato'
+            ]);
         }
 
         echo json_encode([
-            'status' => $successful,
-            'message' => 'non sono riuscito ad aggiornare lo stato di tutti gli ordini per un problema di connessione alla API: riprovare più tardi'
+            'status' => 'success',
+            'message' => 'Ordini aggiornati con successo'
         ]);
         exit;
     }

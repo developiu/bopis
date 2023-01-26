@@ -79,10 +79,15 @@ class OrderMapper
             $id = [ $id ];
         }
 
+        if(empty($id)) {
+            return true;
+        }
+
         $statusesFrom = self::OrderStatusFrom($newStatus);
         $frm = implode(", ", array_fill(0,count($statusesFrom), "?"));
         $in = implode(", ", array_fill(0, count($id), "?"));
         $statement = $this->pdo->prepare("UPDATE orders set status=? WHERE id IN ($in) AND status IN ($frm)" );
+
         if($statement === false) {
             throw new RuntimeException("Errore di database");
         }
@@ -166,6 +171,11 @@ class OrderMapper
         }
 
         return array_unique($statusesFrom);
+    }
+
+    public static function getAllowedTransitions()
+    {
+        return self::$allowedStatusTransitions;
     }
 
     public function getAdapter(): PDO
