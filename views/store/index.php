@@ -5,6 +5,7 @@ use XPort\Bopis\SupplySource\SupplySourceModel;
 $this->layout('layouts/layout');
 
 /** @var SupplySourceModel $store (importata dal controller) */
+/** @var bool $just_saved (importato dal controller) */
 
 $address = $store->getAddress()->toArray();
 $isAddressDefined = boolval(array_filter($address));
@@ -180,6 +181,9 @@ $isAddressDefined = boolval(array_filter($address));
             this.addEventListener("change", function() { validateSwitcher(this); });
         });
 
+        <?php if($just_saved):?>
+            jQuery.notify("Lo store è stato aggiornato", {type: "success"});
+        <?php endif ?>
 
     });
 </script>

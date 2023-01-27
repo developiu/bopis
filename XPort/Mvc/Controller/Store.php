@@ -26,8 +26,13 @@ class Store extends AbstractController
             $store = new SupplySourceModel(['supplySourceCode' => '', 'alias' => '', 'address' => ['addressLine1' => '', 'city' => '' ]]);
         }
 
+        $justSaved = false;
+        if(isset($_SESSION['just_saved'])) {
+            $justSaved = true;
+            unset($_SESSION['just_saved']);
+        }
 
-        echo $this->getRenderer()->render('store/index', ['store' => $store]);
+        echo $this->getRenderer()->render('store/index', ['store' => $store, 'just_saved' => $justSaved]);
     }
 
     public function save()
@@ -53,6 +58,8 @@ class Store extends AbstractController
                 $store->setSupplySourceId($currentStoreOnApi->getSupplySourceId());
 
                 $successful = $service->update($store);
+
+                $_SESSION['just_saved'] = true;
             }
        }
        header("Location: /store");
