@@ -147,7 +147,7 @@ $this->layout('layouts/layout');
       let formData = new FormData();
       formData.append('csv',file);
       let request = new XMLHttpRequest();
-      request.open('POST', 'http://cac.xport.test/products/import-from-csv');
+      request.open('POST', 'http://'+window.location.hostname+'/products/import-from-csv');
       request.onload = function() {
           let data = JSON.parse(request.response);
           if(data.status=='success') {
