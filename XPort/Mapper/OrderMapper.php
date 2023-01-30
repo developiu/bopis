@@ -31,14 +31,24 @@ class OrderMapper
     }
 
     /**
+     * @param array $where Un array del tipo [ field1 => value1, ... ] impostarla ritorna le righe che hanno field1=value1, field2=value2 etc
      * @return array|false
      */
-    public function fetchAll()
+    public function fetchAll(array $where=[])
     {
-        $statement = $this->pdo->query('SELECT * FROM orders ORDER BY id desc');
+        $whereSql = implode(" AND ", array_map(function($key) {
+            return "$key=?";
+        }, array_keys($where)));
+        if($whereSql) {
+            $whereSql = "WHERE " . $whereSql;
+        }
+
+        $query = "SELECT * FROM orders $whereSql ORDER BY id desc";
+        $statement = $this->pdo->prepare($query);
         if($statement === false) {
             return false;
         }
+        $statement->execute($where ? array_values($where) : null);
 
         return $statement->fetchAll();
     }
