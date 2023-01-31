@@ -3,7 +3,6 @@
 namespace XPort\Mapper;
 
 use DomainException;
-use LogicException;
 use PDO;
 use RuntimeException;
 
@@ -53,6 +52,38 @@ class OrderMapper
         return $statement->fetchAll();
     }
 
+    /**
+     * Modifica il campo $field dell'ordine di ordine $orderId a $newValue; se $orderId è un array applica la modifica
+     * a tutti gli ordini di id specificati.
+     *
+     * @param array|string $orderId
+     * @param string $field
+     * @param mixed $newValue
+     * @return bool True on success, false on failure
+     */
+    public function updateOrders(array|string $orderId, string $field, $newValue)
+    {
+        if(is_string($orderId))  {
+            $orderId = [ $orderId ];
+        }
+
+        $idPlaceholders = implode(", ", array_fill(0,count($orderId), "?"));
+        $query = "UPDATE orders set $field=? WHERE id IN ($idPlaceholders)";
+        $statement = $this->pdo->prepare($query);
+        if($statement === false) {
+            return false;
+        }
+        try {
+            $parameters = array_merge([$newValue],$orderId);
+            $statement->execute($parameters);
+        }
+        catch(\PDOException $e) {
+            return false;
+        }
+
+        return true;
+    }
+    
     /**
      *  Annulla l'ordine di dato id: se l'ordine è compatibile con lo stato CANCELLED, mettilo CANCELLED, ALTRIMENTI
      * mettilo REFOUNDED.

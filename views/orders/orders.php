@@ -1,10 +1,12 @@
 <?php
 
 use XPort\StringUtils;
+use XPort\Mvc\Controller\Orders;
 
 $this->layout('layouts/layout');
 
 /** @var array $ordini (importata dal controller) */
+/** @var string $order_type (importata dal controller) */
 ?>
 
 <div class="card">
@@ -12,7 +14,10 @@ $this->layout('layouts/layout');
         <h4 class="card-title">Ordini</h4>
 
         <form class="form-inline flex-row-reverse">
+            <?php if($order_type == Orders::ORDER_TYPE_IN_ENTRATA):?>
             <button type="button" class="btn btn-primary m-1 disabled" title="non ancora implementato">Importa ordini</button>
+            <button type="button" class="btn btn-primary m-1 accept-orders-button" title="non ancora implementato">Accetta ordini</button>
+            <?php else: ?>
             <div class="input-group">
                 <select>
                     <option value="NEW">Nuovo</option>
@@ -25,6 +30,7 @@ $this->layout('layouts/layout');
                     <button class="btn btn-primary update-status-button" type="button">Notifica amazon</button>
                 </div>
             </div>
+            <?php endif ?>
         </form>
         <div class="table-responsive mt-3">
             <table id="order-table" class="table table-striped">
@@ -114,6 +120,27 @@ $this->layout('layouts/layout');
                 }
             });
         });
+
+        jQuery(".accept-orders-button").click(function() {
+            let orderIds = jQuery("#order-table")
+                .find(".selection-checkbox:checked").closest("tr")
+                .map(function() { return jQuery(this).data('order-id');});
+            jQuery.ajax({
+                url: '/orders/accept-orders',
+                data: { ids: jQuery.makeArray(orderIds) },
+                method: 'POST',
+                dataType: 'json',
+                success: function(data) {
+                    if(data.status=='success') {
+                        window.location.reload();
+                    }
+                    else {
+                        jQuery.notify(data.message,{type: 'danger'});
+                    }
+                }
+            });
+        });
+
 
         jQuery(".cancel-button").click(function(e) {
             e.preventDefault();

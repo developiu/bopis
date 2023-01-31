@@ -9,12 +9,23 @@ use XPort\Mvc\AbstractController;
 
 class Orders extends AbstractController
 {
-    public function index()
+    const ORDER_TYPE_IN_ENTRATA = 'in entrata';
+    const ORDER_TYPE_ACCETTATI = 'accettati';
+
+    public function acceptedOrders()
     {
         $mapper = new OrderMapper();
-        $orders = $mapper->fetchAll();
+        $orders = $mapper->fetchAll(['accepted' => 1]);
 
-        echo $this->getRenderer()->render('orders/index',['ordini' => $orders]);
+        echo $this->getRenderer()->render('orders/orders',['ordini' => $orders, 'order_type' => self::ORDER_TYPE_ACCETTATI]);
+    }
+
+    public function newOrders()
+    {
+        $mapper = new OrderMapper();
+        $orders = $mapper->fetchAll(['accepted' => 0]);
+
+        echo $this->getRenderer()->render('orders/orders',['ordini' => $orders,'order_type' => self::ORDER_TYPE_IN_ENTRATA]);
     }
 
 //    public function cancelOrder()
@@ -105,4 +116,25 @@ class Orders extends AbstractController
         ]);
         exit;
     }
+
+    public function acceptOrders()
+    {
+        if(!isset($_POST['ids']) || !is_array($_POST['ids'])) {
+            echo json_encode(['status' => 'error', 'message' => "Seleziona gli ordini da modificare"]);
+            exit;
+        }
+
+        $orderIds = $_POST['ids'];
+
+        $orderMapper = new OrderMapper();
+
+        $successful = $orderMapper->updateOrders($orderIds,'accepted', 1);
+        if(!$successful) {
+            echo json_encode(['status' => 'error', 'message' => 'Errore nell\'aggiornamento degli ordini']);
+        }
+        else {
+            echo json_encode(['status' => 'success', 'message' => 'Gli ordini sono stati aggiornati']);
+        }
+     }
+
 }

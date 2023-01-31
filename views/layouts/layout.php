@@ -88,9 +88,15 @@
               </a>
           </li>
           <li class="nav-item">
-              <a class="nav-link" href="/orders">
+            <a class="nav-link" href="/orders/new-orders">
+                <i class="typcn typcn-archive menu-icon"></i>
+                <span class="menu-title">Ordini in entrata</span>
+            </a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link" href="/orders/accepted-Orders">
                   <i class="typcn typcn-archive menu-icon"></i>
-                  <span class="menu-title">Ordini</span>
+                  <span class="menu-title">Ordini accettati</span>
               </a>
           </li>
           <li class="nav-item">
