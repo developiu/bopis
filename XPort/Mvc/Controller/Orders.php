@@ -117,6 +117,30 @@ class Orders extends AbstractController
         exit;
     }
 
+    public function refoundOrder()
+    {
+        if(!isset($_GET['id']) || !isset($_GET['val'])) {
+            echo json_encode(['status' => 'error', 'message' => "È necessario specificare l'ordine e il valore"]);
+            exit;
+        }
+        $id = $_GET['id'];
+        $val = $_GET['val'];
+        if(!ctype_digit($id) || !ctype_digit($val)) {
+            echo json_encode(['status' => 'error', 'message' => "id e val devono essere numer interi"]);
+            exit;
+        }
+
+        $orderMapper = new OrderMapper();
+        $successful = $orderMapper->updateOrders([$id], 'refounded', boolval($val));
+
+        if(!$successful) {
+            echo json_encode(['status' => 'error', 'message' => 'Errore nell\'aggiornamento dell\'ordine']);
+        }
+        else {
+            echo json_encode(['status' => 'success', 'message' => 'L\'ordine è stato aggiornato']);
+        }
+    }
+
     public function acceptOrders()
     {
         if(!isset($_POST['ids']) || !is_array($_POST['ids'])) {

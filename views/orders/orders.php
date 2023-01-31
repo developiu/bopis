@@ -39,7 +39,10 @@ $this->layout('layouts/layout');
                         <th>Creato il</th>
                         <th>Utente</th>
                         <th>Importo</th>
-                        <th>Stato</th>
+                        <?php if($order_type == Orders::ORDER_TYPE_ACCETTATI):?>
+                            <th>Stato</th>
+                            <th>Rimborsato</th>
+                        <?php endif ?>
                         <th>Azioni</th>
                     </tr>
                 </thead>
@@ -54,7 +57,12 @@ $this->layout('layouts/layout');
                         <td><?= $dateObj->format('d/m/Y') ?></td>
                         <td><?= $ordine['user_name'] ?></td>
                         <td><?= $ordine['amount']?></td>
-                        <td><?=StringUtils::italianStatus($ordine['status']) ?></td>
+                        <?php if($order_type == Orders::ORDER_TYPE_ACCETTATI):?>
+                            <td><?=StringUtils::italianStatus($ordine['status']) ?></td>
+                            <td>
+                                <input class="refounded-checkbox" type="checkbox" value="1"<?= $ordine['refounded'] ? ' checked' : ''?> />
+                            </td>
+                        <?php endif ?>
                         <td class="text-center">
                             <a class="cancel-button"  href="/orders/cancel-order?id=<?=$ordine['id']?>"><i class="typcn typcn-trash"></i></a>
                         </td>
@@ -75,7 +83,10 @@ $this->layout('layouts/layout');
                 {name: "creation_date", orderable: false},
                 {name: "username", orderable: true},
                 {name: "amount", orderable: true, type: "num"},
+                <?php if($order_type == Orders::ORDER_TYPE_ACCETTATI):?>
                 {name: "status", orderable: true},
+                {name: "refounded", orderable: false},
+                <?php endif ?>
                 {name: "actions", orderable: false}
             ],
             language: {
@@ -147,6 +158,25 @@ $this->layout('layouts/layout');
                 jQuery("#confirmation-modal .modal-body").html("Procedere con l'annullamento dell'ordine? non sarà possibile tornare indietro");
                 jQuery("#confirmation-modal .confirmation-button").click(function() { window.location.href = actionUrl; });
             }).modal('show');
+        });
+
+        jQuery(".refounded-checkbox").click(function(e) {
+            let orderId = jQuery(this).closest("tr").data('order-id');
+            let val = jQuery(this).is(":checked") ? 1 : 0;
+            jQuery.ajax({
+                url: '/orders/refound-order',
+                data: { id: orderId, val: val },
+                method: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    if(data.status=='success') {
+                        window.location.reload();
+                    }
+                    else {
+                        jQuery.notify(data.message,{type: 'danger'});
+                    }
+                }
+            });
         });
     });
 
