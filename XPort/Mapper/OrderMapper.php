@@ -13,15 +13,14 @@ class OrderMapper
 
     /** @var array */
     private static $allowedStatusTransitions = [
-        'NEW' => [ 'NEW', 'CANCELLED', 'READY_FOR_PICKUP'],
-        'CANCELLED' => ['CANCELLED'],
-        'READY_FOR_PICKUP' => ['READY_FOR_PICKUP', 'PICKED_UP','REFOUNDED'],
-        'PICKED_UP' => ['PICKED_UP', 'REFOUNDED'],
-        'REFOUNDED' => ['REFOUNDED']
+        'NEW' => [ 'NEW', 'READY_FOR_PICKUP'],
+        'READY_FOR_PICKUP' => ['READY_FOR_PICKUP', 'PICKED_UP','REFUSED'],
+        'PICKED_UP' => ['PICKED_UP', 'REFUSED'],
+        'REFUSED' => ['REFUSED']
     ];
 
     /** @var string[] */
-    private array $statuses = ['NEW', 'CANCELLED', 'READY_FOR_PICKUP', 'PICKED_UP', 'REFOUNDED'];
+    private array $statuses = ['NEW', 'READY_FOR_PICKUP', 'PICKED_UP', 'REFUSED'];
 
     public function __construct()
     {

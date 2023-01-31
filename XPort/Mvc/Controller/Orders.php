@@ -129,6 +129,9 @@ class Orders extends AbstractController
         $orderMapper = new OrderMapper();
 
         $successful = $orderMapper->updateOrders($orderIds,'accepted', 1);
+        if($successful) {
+            $successful = $orderMapper->updateOrders($orderIds,'status', 'READY_FOR_PICKUP');
+        }
         if(!$successful) {
             echo json_encode(['status' => 'error', 'message' => 'Errore nell\'aggiornamento degli ordini']);
         }

@@ -48,4 +48,26 @@ class StringUtils
         return $data;
     }
 
+    /**
+     * Ritorna la traduzione italiana dello stato di un ordine.
+     *
+     * @param string $status
+     * @return string|null
+     */
+    public static function italianStatus(string $status) :?string
+    {
+        switch ($status) {
+            case 'NEW':
+                return 'Nuovo';
+            case 'READY_FOR_PICKUP':
+                return 'Pronto per il ritiro';
+            case 'PICKED_UP':
+                return 'Ritirato';
+            case 'REFUSED':
+                return 'Rifiuto di ritiro';
+            default:
+                return null;
+        }
+    }
+
 }

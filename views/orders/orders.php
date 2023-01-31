@@ -20,11 +20,9 @@ $this->layout('layouts/layout');
             <?php else: ?>
             <div class="input-group">
                 <select>
-                    <option value="NEW">Nuovo</option>
-                    <option value="CANCELLED">Cancellato</option>
-                    <option value="READY_FOR_PICKUP">Pronto all'aquisto</option>
-                    <option value="PICKED_UP">Acquistato</option>
-                    <option value="REFOUNDED">Rimborsato</option>
+                    <option value="READY_FOR_PICKUP">Pronto per il ritiro</option>
+                    <option value="PICKED_UP">Ritirato</option>
+                    <option value="REFUSED">Rifiuto di ritiro</option>
                 </select>
                 <div class="input-group-append">
                     <button class="btn btn-primary update-status-button" type="button">Notifica amazon</button>
@@ -56,7 +54,7 @@ $this->layout('layouts/layout');
                         <td><?= $dateObj->format('d/m/Y') ?></td>
                         <td><?= $ordine['user_name'] ?></td>
                         <td><?= $ordine['amount']?></td>
-                        <td><?= $ordine['status']?></td>
+                        <td><?=StringUtils::italianStatus($ordine['status']) ?></td>
                         <td class="text-center">
                             <a class="cancel-button"  href="/orders/cancel-order?id=<?=$ordine['id']?>"><i class="typcn typcn-trash"></i></a>
                         </td>
