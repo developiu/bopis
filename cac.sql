@@ -28,6 +28,8 @@ CREATE TABLE `orders` (
   `user_name` varchar(255) NOT NULL,
   `amount` decimal(10,2) NOT NULL,
   `status` varchar(255) NOT NULL,
+  `accepted` tinyint(1) DEFAULT 0,
+  `refounded` tinyint(1) DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -38,7 +40,7 @@ CREATE TABLE `orders` (
 
 LOCK TABLES `orders` WRITE;
 /*!40000 ALTER TABLE `orders` DISABLE KEYS */;
-INSERT INTO `orders` VALUES ('408-8922092-4631532','2022-11-07 15:49:14','ww63gv6ymw6n2ng@marketplace.amazon.it',78.00,'Shipped');
+INSERT INTO `orders` VALUES ('2','2022-11-07 15:51:00','ftapparo',809.00,'NEW',0,0),('3','2022-11-08 10:00:00','ftapparo',109.00,'READY_FOR_PICKUP',1,0),('408-8922092-4631532','2022-11-07 15:49:14','ww63gv6ymw6n2ng@marketplace.amazon.it',78.00,'NEW',0,0);
 /*!40000 ALTER TABLE `orders` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -59,7 +61,7 @@ CREATE TABLE `products` (
   `synced` tinyint(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   UNIQUE KEY `products_ean_unique` (`ean`)
-) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -131,4 +133,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-01-26 14:23:58
+-- Dump completed on 2023-02-01 18:01:16
